@@ -5,6 +5,7 @@ import logo from './images/logo.svg';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Hero from './components/Hero';
+import Button from './components/Button';
 
 class App extends React.Component {
 	constructor(props) {
@@ -83,22 +84,26 @@ class App extends React.Component {
 									</p>
 
 									<div className="film-btn-container">
-										<button
+										<Button
 											id={id}
 											className="film-card-btn btn"
 											onClick={() => this.handleClick(id)}
-										>
-											{this.state.favorites.includes(id)
-												? 'Remove 💔'
-												: 'Favorite'}
-										</button>
+											placeholder={
+												this.state.favorites.includes(id)
+													? 'Remove 💔'
+													: 'Favorite'
+											}
+										/>
 									</div>
 								</div>
 							</div>
 						))}
 					</div>
 					<div className="main-content-btn">
-						<button className="more-content-btn btn">Get More Content</button>
+						<Button
+							className="more-content-btn btn"
+							placeholder="Get More Content"
+						/>
 					</div>
 				</main>
 
