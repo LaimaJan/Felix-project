@@ -5,7 +5,6 @@ import logo from './images/logo.svg';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Hero from './components/Hero';
-// import FavoriteBtn from './components/Favorite-btn';
 
 class App extends React.Component {
 	constructor(props) {
@@ -14,28 +13,23 @@ class App extends React.Component {
 			freeFilms: [],
 			loading: false,
 			error: false,
-			favoriteBtn: false,
 			favorites: [],
 		};
 
 		this.handleClick = this.handleClick.bind(this);
 	}
 
-	handleClick(event) {
-		const id = event.currentTarget.id;
+	handleClick(id) {
 		console.log(id);
 		let index = this.state.favorites.indexOf(id);
 		if (index === -1) {
 			this.setState((prevState) => ({
 				favorites: [...prevState.favorites, id],
 			}));
-			console.log(this.state);
+			console.log(this.state.favorites);
 		} else {
-			console.log('pirma mygtuka spaudziant neveikia, sekantys veikia');
-			console.log(this.state.favorites.splice(index, 1));
-			// if (index !== -1) {
-			// 	array.splice(index, 1);
-			// }
+			// console.log(this.state.favorites.splice(index, 1));
+
 			this.setState((prevState) => ({
 				favorites: prevState.favorites.filter(function (e) {
 					return e !== id;
@@ -92,15 +86,13 @@ class App extends React.Component {
 										<button
 											id={id}
 											className="film-card-btn btn"
-											onClick={this.handleClick}
+											onClick={() => this.handleClick(id)}
 										>
-											{this.state.favorites.indexOf(id) > 0
+											{this.state.favorites.includes(id)
 												? 'Remove 💔'
 												: 'Favorite'}
-											{/* {favorite ? 'Remove 💔' : 'Favorite'} */}
 										</button>
 									</div>
-									{/* <FavoriteBtn /> */}
 								</div>
 							</div>
 						))}
