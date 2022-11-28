@@ -4,22 +4,17 @@
 }
 
 header {
-	margin: 0 auto;
+	margin: 0;
 	background-color: #000000;
 	padding-top: 20px;
 	padding-bottom: 20px;
 	display: flex;
 	flex-direction: row;
-	align-items: center;
 	justify-content: space-between;
 }
 
 .felixLogo {
 	padding-left: 20px;
-}
-
-.btn {
-	background-color: #e50914;
 }
 
 .sign-in-btn {
@@ -30,4 +25,5 @@ header {
 	color: #fff;
 	font-weight: 600;
 	border-radius: 5px;
+	background-color: #e50914;
 }

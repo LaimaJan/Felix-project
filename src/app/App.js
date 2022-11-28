@@ -33,6 +33,7 @@ class App extends React.Component {
 
 			this.setState((prevState) => ({
 				favorites: prevState.favorites.filter(function (e) {
+					console.log('Mano E' + e);
 					return e !== id;
 				}),
 			}));
@@ -76,17 +77,25 @@ class App extends React.Component {
 
 						{freeFilms.map(({ title, id, image, description }) => (
 							<div className="film-card" key={id}>
-								<img className="film-card-image" src={image} alt=""></img>
+								<div className="film-card-image-holder">
+									<img className="film-card-image" src={image} alt=""></img>
+								</div>
 								<div className="film-card-bottom-content">
-									<p className="film-title">{title}</p>
-									<p className="film-summary">
-										{description.substring(0, 55)}...
-									</p>
+									<div className="film-card-text-container">
+										<p className="film-title">{title}</p>
+										<p className="film-summary">
+											{description.substring(0, 55)}...
+										</p>
+									</div>
 
 									<div className="film-btn-container">
 										<Button
 											id={id}
-											className="film-card-btn btn"
+											className={
+												this.state.favorites.includes(id)
+													? 'film-card-removeBtn'
+													: 'film-card-btn'
+											}
 											onClick={() => this.handleClick(id)}
 											placeholder={
 												this.state.favorites.includes(id)
