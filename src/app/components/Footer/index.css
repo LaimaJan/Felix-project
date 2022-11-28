@@ -1,0 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;500;700;900&display=swap');
+* {
+	font-family: 'Roboto', sans-serif;
+}
+
+.footer-content {
+	background-color: #222222;
+	margin: 0 auto;
+	padding-top: 20px;
+	padding-bottom: 20px;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.footer-content p {
+	font-size: 16px;
+	color: #fff;
+	font-weight: 600;
+	margin-left: 20px;
+}
+
+.credit-cards {
+	margin-right: 20px;
+}

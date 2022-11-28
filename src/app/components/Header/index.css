@@ -1,0 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;500;700;900&display=swap');
+* {
+	font-family: 'Roboto', sans-serif;
+}
+
+header {
+	margin: 0 auto;
+	background-color: #000000;
+	padding-top: 20px;
+	padding-bottom: 20px;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.felixLogo {
+	padding-left: 20px;
+}
+
+.btn {
+	background-color: #e50914;
+}
+
+.sign-in-btn {
+	margin-right: 20px;
+	border: none;
+	padding: 10px 40px;
+	font-size: 15px;
+	color: #fff;
+	font-weight: 600;
+	border-radius: 5px;
+}
