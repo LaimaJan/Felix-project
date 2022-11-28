@@ -29,8 +29,6 @@ class App extends React.Component {
 			}));
 			console.log(this.state.favorites);
 		} else {
-			// console.log(this.state.favorites.splice(index, 1));
-
 			this.setState((prevState) => ({
 				favorites: prevState.favorites.filter(function (e) {
 					console.log('Mano E' + e);
@@ -93,8 +91,8 @@ class App extends React.Component {
 											id={id}
 											className={
 												this.state.favorites.includes(id)
-													? 'film-card-removeBtn'
-													: 'film-card-btn'
+													? 'film-card-btn removeBtn'
+													: 'film-card-btn favoriteBtn'
 											}
 											onClick={() => this.handleClick(id)}
 											placeholder={
@@ -110,7 +108,7 @@ class App extends React.Component {
 					</div>
 					<div className="main-content-btn">
 						<Button
-							className="more-content-btn btn"
+							className="more-content-btn"
 							placeholder="Get More Content"
 						/>
 					</div>

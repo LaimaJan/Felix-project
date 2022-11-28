@@ -48,7 +48,7 @@ main {
 
 .film-card-bottom-content {
 	position: absolute;
-	margin-top: -170px;
+	margin-top: -140px;
 	width: 340px;
 	background-color: #222222;
 	display: flex;
@@ -75,24 +75,17 @@ main {
 	color: #fff;
 	margin: 0 auto;
 	margin-top: 8px;
-	/* margin-bottom: 40px; */
 	font-size: 18px;
 	font-family: 'Roboto', sans-serif;
 	font-weight: 600;
 	max-width: 280px;
 }
 
-.film-btn-container {
-	margin: 0;
-	margin-top: 15px;
-	margin-bottom: 15px;
-	display: flex;
-}
-
 .film-card-btn {
 	margin: 0;
 	margin-left: 30px;
-	margin-bottom: 0px;
+	margin-top: 15px;
+	margin-bottom: 15px;
 	border: none;
 	width: 130px;
 	height: 40px;
@@ -103,23 +96,15 @@ main {
 	border-radius: 5px;
 	text-align: center;
 	align-items: flex-end;
+}
+
+.favoriteBtn {
 	background-color: #e50914;
 }
 
-.film-card-removeBtn {
-	margin: 0;
-	margin-left: 30px;
+.removeBtn {
 	border: 1px solid #e50914;
-	width: 130px;
 	background-color: transparent;
-	height: 40px;
-	font-size: 18px;
-	font-family: 'Roboto', sans-serif;
-	color: #fff;
-	font-weight: 600;
-	border-radius: 5px;
-	text-align: center;
-	align-items: flex-end;
 }
 
 .main-content-btn button {
