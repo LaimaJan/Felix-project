@@ -1,6 +1,6 @@
 import './index.css';
 
-import creditCards from './../../images/credit-cards 1.png';
+import creditCards from '../../images/credit-cards 1.png';
 
 function Footer() {
 	return (

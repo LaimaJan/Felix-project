@@ -1,5 +1,5 @@
 import './index.css';
-import felixLogo from './../../images/F.svg';
+import felixLogo from '../../images/F.svg';
 import Button from '../Button';
 
 function Header({ className }) {
