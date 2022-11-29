@@ -10,13 +10,16 @@ import Button from './components/Button';
 class App extends React.Component {
 	constructor(props) {
 		super(props);
+		const retrieveID = JSON.parse(localStorage.getItem('id')) || [];
+
 		this.state = {
 			freeFilms: [],
 			loading: false,
 			error: false,
-			favorites: [],
+			favorites: retrieveID,
 		};
 
+		console.log(this.state);
 		this.handleClick = this.handleClick.bind(this);
 	}
 
@@ -27,6 +30,9 @@ class App extends React.Component {
 			this.setState((prevState) => ({
 				favorites: [...prevState.favorites, id],
 			}));
+
+			localStorage.setItem('id', JSON.stringify([...this.state.favorites, id]));
+
 			console.log(this.state.favorites);
 		} else {
 			this.setState((prevState) => ({
