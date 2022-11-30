@@ -19,6 +19,7 @@ class App extends React.Component {
 			favorites: retrieveID,
 		};
 
+		console.log(this.state);
 		this.handleClick = this.handleClick.bind(this);
 	}
 
@@ -32,19 +33,24 @@ class App extends React.Component {
 			}));
 
 			localStorage.setItem('id', JSON.stringify([...this.state.favorites, id]));
-		} else {
-			const remove = (items, index) => {
-				return [
-					...items.slice(0, index),
-					...items.slice(index + 1, items.length),
-				];
-			};
-			const filmIds = remove(this.state.favorites, index);
 
-			localStorage.setItem('id', JSON.stringify(filmIds));
+			console.log(this.state.favorites);
+		} else {
+			console.log(this.state);
+			let _this = this;
+			const removeId = this.state.favorites.filter(function (e) {
+				console.log('Mano E' + e);
+
+				localStorage.setItem(
+					'id',
+					JSON.stringify([..._this.state.favorites, id])
+				);
+				return e !== id;
+			});
+			console.log('Mano E');
 
 			this.setState((prevState) => ({
-				favorites: filmIds,
+				favorites: removeId,
 			}));
 		}
 	}
