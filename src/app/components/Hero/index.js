@@ -6,7 +6,7 @@ function Hero({ className }) {
 		<div className={className}>
 			<div className="hero-content">
 				<p className="paragraph">Wanna more Content?</p>
-				<Button className="get-access-btn" placeholder="Get Access" />
+				<Button>Get Access </Button>
 			</div>
 		</div>
 	);

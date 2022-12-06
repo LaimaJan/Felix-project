@@ -1,8 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;500;700;900&display=swap');
-* {
-	font-family: 'Roboto', sans-serif;
-}
-
 .hero {
 	height: 500px;
 	background: url('../../images/Hero\ Image.jpg');
@@ -26,7 +21,11 @@
 	font-weight: 600;
 }
 
-.get-access-btn {
+.hero Button {
+	margin-top: 20px;
+}
+
+/* .get-access-btn {
 	margin: 0 auto;
 	background-color: #e50914;
 	border: none;
@@ -37,4 +36,4 @@
 	color: #fff;
 	font-weight: 600;
 	border-radius: 5px;
-}
+} */

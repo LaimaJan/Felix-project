@@ -1,19 +1,14 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;500;700;900&display=swap');
-* {
-	font-family: 'Roboto', sans-serif;
-}
-
 .App {
 	display: flex;
 	justify-content: center;
 	flex-direction: column;
 	text-align: center;
 	min-width: 600px;
-	background-color: #000000;
+	background-color: var(--true-black);
 }
 
 main {
-	background-color: #000000;
+	background-color: var(--true-black);
 }
 
 .main-content {
@@ -32,7 +27,7 @@ main {
 	width: 340px;
 	display: flex;
 	flex-direction: column;
-	background-color: #222222;
+	background-color: var(--black);
 }
 
 .film-card-image-holder {
@@ -43,7 +38,7 @@ main {
 }
 
 .film-card-image {
-	background-color: #fff;
+	background-color: var(--white);
 	width: 100%;
 }
 
@@ -59,19 +54,17 @@ main {
 }
 
 .film-title {
-	color: #fff;
+	color: var(--white);
 	margin: 0 auto;
 	margin-bottom: 20px;
 
 	font-size: 28px;
-	font-family: 'Roboto', sans-serif;
 	font-weight: 700;
 }
 
 .film-summary {
-	color: #fff;
+	color: var(--white);
 	font-size: 18px;
-	font-family: 'Roboto', sans-serif;
 	font-weight: 600;
 	display: -webkit-box;
 	-webkit-line-clamp: 2;
@@ -79,39 +72,6 @@ main {
 	overflow: hidden;
 }
 
-.film-card-btn {
-	margin: 0;
-	border: none;
-	padding: 12px 40px;
-
-	font-size: 18px;
-	font-family: 'Roboto', sans-serif;
-	color: #fff;
-	font-weight: 600;
-	border-radius: 5px;
-	text-align: center;
-	align-items: flex-end;
-}
-
-.favoriteBtn {
-	background-color: #e50914;
-}
-
-.removeBtn {
-	border: 1px solid #e50914;
-	background-color: transparent;
-}
-
-.main-content-btn button {
-	margin: 0 auto;
-	background-color: #e50914;
-	border: none;
-	padding: 10px 50px;
-	margin-top: 80px;
-	margin-bottom: 80px;
-	font-size: 16px;
-	font-family: 'Roboto', sans-serif;
-	color: #fff;
-	font-weight: 600;
-	border-radius: 5px;
+.main-content-btn {
+	margin-bottom: 40px;
 }

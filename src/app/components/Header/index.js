@@ -6,7 +6,7 @@ function Header({ className }) {
 	return (
 		<header className={className}>
 			<img className="felixLogo" src={felixLogo} alt="felix-logo" />
-			<Button className="sign-in-btn btn" placeholder="Sign in" />
+			<Button>Sign in</Button>
 		</header>
 	);
 }
