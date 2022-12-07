@@ -15,7 +15,7 @@ class MyPage extends React.Component {
 		const retrieveID = JSON.parse(localStorage.getItem('id')) || [];
 
 		this.state = {
-			freeFilms: [],
+			allFilms: [],
 			loading: false,
 			error: false,
 			favorites: retrieveID,
@@ -41,19 +41,38 @@ class MyPage extends React.Component {
 		}
 	}
 
+	//  https://dummy-video-api.onrender.com/content/items
 	async componentDidMount() {
 		this.setState({ loading: true });
 		try {
+			const tokenNumber = localStorage.getItem('token');
+			console.log('TOKENAS MYPAGE: ' + tokenNumber);
+
 			const result = await fetch(
-				'https://dummy-video-api.onrender.com/content/items '
-			);
-			console.log(result);
+				'https://dummy-video-api.onrender.com/content/items',
+				{
+					method: 'GET',
+					headers: {
+						Authorization: tokenNumber,
+					},
+				}
+			).then(async function (data) {
+				let response = await data.json();
+				console.log('RESPONSAS');
+				console.log(response);
+				// const json = await result.json();
+				this.setState({ allFilms: response });
+
+				localStorage.setItem('token', response.token);
+
+				this.setState({ token: response.token });
+			});
 
 			if (result.status >= 400 && result.status <= 599) {
 				this.setState({ error: true });
 			} else {
-				const json = await result.json();
-				this.setState({ freeFilms: json });
+				// const json = await result.json();
+				// this.setState({ allFilms: json });
 			}
 		} catch (error) {
 			this.setState({ error: true });
@@ -63,7 +82,7 @@ class MyPage extends React.Component {
 	}
 
 	render() {
-		const { loading, error, freeFilms, favorites } = this.state;
+		const { loading, error, allFilms, favorites } = this.state;
 
 		return (
 			<div className="App">
@@ -80,7 +99,7 @@ class MyPage extends React.Component {
 						{loading && <img src={logo} className="App-logo" alt="logo" />}
 						{error && <p>Whoops! Failed to Load! 🙊</p>}
 
-						{freeFilms.map(({ title, id, image, description }) => (
+						{allFilms.map(({ title, id, image, description }) => (
 							<MovieCard
 								id={id}
 								key={id}

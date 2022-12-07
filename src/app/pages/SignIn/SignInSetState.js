@@ -1,5 +1,7 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+// import { Link } from 'react-router-dom';
+
+// import PropTypes from 'prop-types';
 import Header from '../../components/Header';
 import Button from '../../components/Button';
 import Footer from '../../components/Footer';
@@ -10,24 +12,23 @@ import './SignIn.css';
 export default class SignInSetState extends React.Component {
 	constructor(props) {
 		super(props);
+		const retrieveToken = localStorage.getItem('token') || '';
+
 		this.state = {
 			username: '',
 			password: '',
 			hidePassword: true,
-			token: this.props.token,
+			token: retrieveToken,
 			formValid: false,
 		};
-
-		// this.handleInputChange = this.handleInputChange.bind(this);
-		// this.handleSubmit = this.handleSubmit.bind(this);
+		console.log('TOKENAS');
+		console.log(this.state.token);
 	}
 
 	handleChange = (e) => {
 		this.setState({
 			[e.target.id]: e.target.value,
 		});
-
-		// console.log('handleChange this.state', this.state);
 	};
 
 	managePasswordVisibility = () => {
@@ -43,7 +44,12 @@ export default class SignInSetState extends React.Component {
 			body: JSON.stringify({ username: username, password: password }),
 		}).then(async function (data) {
 			let response = await data.json();
+			console.log('RESPONSAS');
 			console.log(response);
+
+			localStorage.setItem('token', response.token);
+
+			this.setState({ token: response.token });
 		});
 	};
 
@@ -54,15 +60,15 @@ export default class SignInSetState extends React.Component {
 			this.state.password
 		);
 
-		console.log('token val', this.props.token);
+		console.log(tokenval);
 
-		if (tokenval) {
-			console.log('okokok');
-			this.props.parentCallback(true);
-			this.setState({
-				token: tokenval,
-			});
-		}
+		// if (tokenval) {
+		// 	// console.log('okokok');
+		// 	// this.props.parentCallback(true);
+		// 	this.setState({
+		// 		token: tokenval,
+		// 	});
+		// }
 	};
 
 	render() {
@@ -97,7 +103,9 @@ export default class SignInSetState extends React.Component {
 							</div>
 						</label>
 						<div className="button-container">
+							{/* <Link to="/myPage"> */}
 							<Button type="submit">Sign in</Button>
+							{/* </Link> */}
 						</div>
 					</form>
 				</div>
@@ -107,6 +115,6 @@ export default class SignInSetState extends React.Component {
 	}
 }
 
-SignInSetState.propTypes = {
-	token: PropTypes.bool.isRequired,
-};
+// SignInSetState.propTypes = {
+// 	token: PropTypes.bool.isRequired,
+// };
