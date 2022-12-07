@@ -1,0 +1,65 @@
+.signIn-wrapper {
+	display: flex;
+	min-height: 100vh;
+	flex-direction: column;
+	justify-content: space-between;
+	background-color: var(--black);
+}
+
+.signIn-container {
+	display: flex;
+	flex-direction: column;
+	min-width: 600px;
+}
+
+form {
+	margin: 0 auto;
+	background-color: var(--gray);
+	margin-top: 140px;
+	margin-bottom: 440px;
+	padding-top: 45px;
+	padding-right: 80px;
+	padding-left: 80px;
+	padding-bottom: 20px;
+	border-radius: 10px;
+
+	display: flex;
+	flex-direction: column;
+}
+
+form label p {
+	font-size: 24px;
+	font-weight: 700;
+	line-height: 29px;
+	color: var(--black);
+}
+
+form label:nth-child(2) p {
+	margin-top: 20px;
+}
+
+form label input {
+	font-size: 24px;
+	font-weight: 500;
+	line-height: 29px;
+	color: var(--black);
+	padding: 5px 80px;
+}
+
+.password-icon-container {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+
+.button-container {
+	display: flex;
+	justify-content: center;
+	margin-top: 40px;
+}
+
+/* <FaEye/> */
+svg {
+	margin-left: -50px;
+	font-size: 28px;
+}

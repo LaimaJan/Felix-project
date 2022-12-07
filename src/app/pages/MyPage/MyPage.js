@@ -1,0 +1,106 @@
+import React from 'react';
+import { Link } from 'react-router-dom';
+
+import './MyPage.css';
+import logo from '../../images/logo.svg';
+import Header from '../../components/Header';
+import Footer from '../../components/Footer';
+import Hero from '../../components/Hero';
+import Button from '../../components/Button';
+import MovieCard from '../../components/MovieCard';
+
+class MyPage extends React.Component {
+	constructor(props) {
+		super(props);
+		const retrieveID = JSON.parse(localStorage.getItem('id')) || [];
+
+		this.state = {
+			freeFilms: [],
+			loading: false,
+			error: false,
+			favorites: retrieveID,
+		};
+
+		this.handleClick = this.handleClick.bind(this);
+	}
+
+	handleClick(id) {
+		if (!this.state.favorites.includes(id)) {
+			this.setState((prevState) => ({
+				favorites: [...prevState.favorites, id],
+			}));
+
+			localStorage.setItem('id', JSON.stringify([...this.state.favorites, id]));
+		} else {
+			const filmIds = this.state.favorites.filter((movieId) => movieId !== id);
+			localStorage.setItem('id', JSON.stringify(filmIds));
+
+			this.setState({
+				favorites: filmIds,
+			});
+		}
+	}
+
+	async componentDidMount() {
+		this.setState({ loading: true });
+		try {
+			const result = await fetch(
+				'https://dummy-video-api.onrender.com/content/items '
+			);
+			console.log(result);
+
+			if (result.status >= 400 && result.status <= 599) {
+				this.setState({ error: true });
+			} else {
+				const json = await result.json();
+				this.setState({ freeFilms: json });
+			}
+		} catch (error) {
+			this.setState({ error: true });
+		} finally {
+			this.setState({ loading: false });
+		}
+	}
+
+	render() {
+		const { loading, error, freeFilms, favorites } = this.state;
+
+		return (
+			<div className="App">
+				<Header className="header">
+					<Link to="/">
+						<Button>Logout</Button>
+					</Link>
+				</Header>
+
+				<Hero className="hero" />
+
+				<main>
+					<div className="main-content">
+						{loading && <img src={logo} className="App-logo" alt="logo" />}
+						{error && <p>Whoops! Failed to Load! 🙊</p>}
+
+						{freeFilms.map(({ title, id, image, description }) => (
+							<MovieCard
+								id={id}
+								key={id}
+								title={title}
+								description={description}
+								image={image}
+								isFavorite={favorites.includes(id)}
+								onHandleClick={() => this.handleClick(id)}
+							/>
+						))}
+					</div>
+					<div className="main-content-btn">
+						<Button>Get More Content </Button>
+					</div>
+				</main>
+
+				<Footer />
+			</div>
+		);
+	}
+}
+
+export default MyPage;

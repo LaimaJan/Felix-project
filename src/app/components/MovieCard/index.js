@@ -1,5 +1,5 @@
 import Button from '../Button';
-import '../../App.css';
+import '../../pages/Home/App.css';
 
 function MovieCard({ title, description, image, onHandleClick, isFavorite }) {
 	return (
