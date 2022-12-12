@@ -42,7 +42,6 @@ class MyPage extends React.Component {
 		}
 	}
 
-	//  https://dummy-video-api.onrender.com/content/items
 	async componentDidMount() {
 		this.setState({ loading: true });
 		try {
@@ -81,9 +80,9 @@ class MyPage extends React.Component {
 		return (
 			<div className="App">
 				<Header className="header">
-					<Link to="/">
-						<Button>Logout</Button>
-					</Link>
+					<Button>
+						<Link to="/">Logout</Link>
+					</Button>
 				</Header>
 
 				<Hero className="hero" />

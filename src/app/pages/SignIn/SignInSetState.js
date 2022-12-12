@@ -1,5 +1,5 @@
 import React from 'react';
-// import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Header from '../../components/Header';
 import Button from '../../components/Button';
 import Footer from '../../components/Footer';
@@ -69,8 +69,6 @@ export default class SignInSetState extends React.Component {
 
 			this.setState({ username: '' });
 			this.setState({ password: '' });
-
-			// <Link to="/myPage" />;
 		}
 	};
 
@@ -114,9 +112,9 @@ export default class SignInSetState extends React.Component {
 							</div>
 						</label>
 						<div className="button-container">
-							{/* <Link to="/myPage"> */}
-							<Button type="submit">Sign in</Button>
-							{/* </Link> */}
+							<Button type="submit">
+								<Link to="/myPage">Sign in</Link>
+							</Button>
 						</div>
 					</form>
 				</div>

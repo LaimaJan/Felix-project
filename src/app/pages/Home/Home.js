@@ -68,9 +68,9 @@ class Home extends React.Component {
 		return (
 			<div className="App">
 				<Header className="header">
-					<Link to="/signIn">
-						<Button>Sign in</Button>
-					</Link>
+					<Button>
+						<Link to="/signIn">Sign in</Link>
+					</Button>
 				</Header>
 
 				<Hero className="hero" />
