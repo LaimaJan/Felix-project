@@ -1,10 +1,17 @@
 import Button from '../Button';
 import '../../pages/Home/App.css';
 
-function MovieCard({ title, description, image, onHandleClick, isFavorite }) {
+function MovieCard({
+	title,
+	description,
+	image,
+	onHandleClick,
+	isFavorite,
+	singleMovie,
+}) {
 	return (
 		<div className="film-card">
-			<div className="film-card-image-holder">
+			<div className="film-card-image-holder" onClick={singleMovie}>
 				<img
 					className="film-card-image"
 					src={image}
@@ -12,7 +19,7 @@ function MovieCard({ title, description, image, onHandleClick, isFavorite }) {
 				></img>
 			</div>
 			<div className="film-card-bottom-content">
-				<div className="film-card-text-container">
+				<div className="film-card-text-container" onClick={singleMovie}>
 					<p className="film-title">{title}</p>
 					<p className="film-summary">{description}</p>
 				</div>

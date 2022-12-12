@@ -10,56 +10,58 @@ import Footer from '../../components/Footer';
 import './SingleMovie.css';
 
 export default class SingleMovie extends React.Component {
-	// constructor(props) {
-	// 	super(props);
-	// 	const retrieveToken = localStorage.getItem('token') || '';
+	constructor(props) {
+		super(props);
+		const retrieveToken = localStorage.getItem('token') || '';
 
-	// 	this.state = {
-	// 		username: '',
-	// 		password: '',
-	// 		hidePassword: true,
-	// 		token: retrieveToken,
-	// 		formValid: false,
-	// 		failureMessage: false,
-	// 	};
-	// 	console.log('Tokenas this.state');
-	// 	console.log(this.state.token);
-	// }
+		this.state = {
+			username: '',
+			password: '',
+			token: retrieveToken,
+			singleMovie: '',
+			pressedMovie: '',
+		};
+		console.log('Tokenas this.state');
+		console.log(this.state.token);
+	}
 
-	// async componentDidMount() {
-	// 	this.setState({ loading: true });
-	// 	try {
-	// 		const tokenNumber = localStorage.getItem('token');
-	// 		console.log('TOKENAS MYPAGE: ' + tokenNumber);
+	async componentDidMount() {
+		this.setState({ loading: true });
+		try {
+			const tokenNumber = localStorage.getItem('token');
+			console.log('TOKENAS SingleMovie: ' + tokenNumber);
 
-	// 		const result = await fetch(
-	// 			'https://dummy-video-api.onrender.com/content/items/:itemId',
-	// 			{
-	// 				method: 'GET',
-	// 				headers: {
-	// 					Authorization: tokenNumber,
-	// 				},
-	// 			}
-	// 		);
+			const result = await fetch(
+				'https://dummy-video-api.onrender.com/content/items/:itemId',
+				{
+					method: 'GET',
+					headers: {
+						Authorization: tokenNumber,
+					},
+					// body: {
+					// 	id: pressedMovie,
+					// },
+				}
+			);
 
-	// 		if (result.status >= 400 && result.status <= 599) {
-	// 			this.setState({ error: true });
-	// 		} else {
-	// 			let response = await result.json();
-	// 			console.log('RESPONSAS');
-	// 			console.log(response);
+			if (result.status >= 400 && result.status <= 599) {
+				this.setState({ error: true });
+			} else {
+				let response = await result.json();
+				console.log('RESPONSAS');
+				console.log(response);
 
-	// 			this.setState({ allFilms: response });
-	// 		}
-	// 	} catch (error) {
-	// 		this.setState({ error: true });
-	// 	} finally {
-	// 		this.setState({ loading: false });
-	// 	}
-	// }
+				this.setState({ singleMovie: response });
+			}
+		} catch (error) {
+			this.setState({ error: true });
+		} finally {
+			this.setState({ loading: false });
+		}
+	}
 
 	render() {
-		// const { loading, error, allFilms, favorites } = this.state;
+		// const { loading, error, singleMovie, favorites } = this.state;
 		return (
 			<div className="singleMovie-wrapper">
 				<Header>

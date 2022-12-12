@@ -20,7 +20,7 @@ class MyPage extends React.Component {
 			error: false,
 			favorites: retrieveID,
 		};
-		console.log(this.state.allFilms);
+		// console.log(this.state.allFilms);
 
 		this.handleClick = this.handleClick.bind(this);
 	}
@@ -42,11 +42,15 @@ class MyPage extends React.Component {
 		}
 	}
 
+	singleMovieClicked = (id) => {
+		console.log(id);
+	};
+
 	async componentDidMount() {
 		this.setState({ loading: true });
 		try {
 			const tokenNumber = localStorage.getItem('token');
-			console.log('TOKENAS MYPAGE: ' + tokenNumber);
+			// console.log('TOKENAS MYPAGE: ' + tokenNumber);
 
 			const result = await fetch(
 				'https://dummy-video-api.onrender.com/content/items',
@@ -62,8 +66,8 @@ class MyPage extends React.Component {
 				this.setState({ error: true });
 			} else {
 				let response = await result.json();
-				console.log('RESPONSAS');
-				console.log(response);
+				// console.log('RESPONSAS');
+				// console.log(response);
 
 				this.setState({ allFilms: response });
 			}
@@ -93,6 +97,7 @@ class MyPage extends React.Component {
 						{error && <p>Whoops! Failed to Load! 🙊</p>}
 
 						{allFilms.map(({ title, id, image, description }) => (
+							// <Link to="/singleMovie">
 							<MovieCard
 								id={id}
 								key={id}
@@ -101,9 +106,12 @@ class MyPage extends React.Component {
 								image={image}
 								isFavorite={favorites.includes(id)}
 								onHandleClick={() => this.handleClick(id)}
+								singleMovie={() => this.singleMovieClicked(id)}
 							/>
+							// </Link>
 						))}
 					</div>
+
 					<div className="main-content-btn">
 						<Button>Get More Content </Button>
 					</div>
