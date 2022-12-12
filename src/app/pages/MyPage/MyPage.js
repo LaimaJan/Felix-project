@@ -20,6 +20,7 @@ class MyPage extends React.Component {
 			error: false,
 			favorites: retrieveID,
 		};
+		console.log(this.state.allFilms);
 
 		this.handleClick = this.handleClick.bind(this);
 	}
@@ -56,23 +57,16 @@ class MyPage extends React.Component {
 						Authorization: tokenNumber,
 					},
 				}
-			).then(async function (data) {
-				let response = await data.json();
-				console.log('RESPONSAS');
-				console.log(response);
-				// const json = await result.json();
-				this.setState({ allFilms: response });
-
-				localStorage.setItem('token', response.token);
-
-				this.setState({ token: response.token });
-			});
+			);
 
 			if (result.status >= 400 && result.status <= 599) {
 				this.setState({ error: true });
 			} else {
-				// const json = await result.json();
-				// this.setState({ allFilms: json });
+				let response = await result.json();
+				console.log('RESPONSAS');
+				console.log(response);
+
+				this.setState({ allFilms: response });
 			}
 		} catch (error) {
 			this.setState({ error: true });

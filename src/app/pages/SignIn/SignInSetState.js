@@ -1,7 +1,5 @@
 import React from 'react';
 // import { Link } from 'react-router-dom';
-
-// import PropTypes from 'prop-types';
 import Header from '../../components/Header';
 import Button from '../../components/Button';
 import Footer from '../../components/Footer';
@@ -20,8 +18,9 @@ export default class SignInSetState extends React.Component {
 			hidePassword: true,
 			token: retrieveToken,
 			formValid: false,
+			failureMessage: false,
 		};
-		console.log('TOKENAS');
+		console.log('Tokenas this.state');
 		console.log(this.state.token);
 	}
 
@@ -36,7 +35,7 @@ export default class SignInSetState extends React.Component {
 	};
 
 	signInUser = async (username, password) => {
-		return fetch('http://localhost:8080/signIn', {
+		return fetch('https://dummy-video-api.onrender.com/auth/login', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
@@ -44,36 +43,38 @@ export default class SignInSetState extends React.Component {
 			body: JSON.stringify({ username: username, password: password }),
 		}).then(async function (data) {
 			let response = await data.json();
-			console.log('RESPONSAS');
+			console.log('Tokenas');
 			console.log(response);
 
 			localStorage.setItem('token', response.token);
-
-			this.setState({ token: response.token });
 		});
 	};
 
+	toggleFailMessageClass() {
+		const currentState = this.state.failureMessage;
+		this.setState({ failureMessage: !currentState });
+	}
+
 	handleSubmit = async (e) => {
 		e.preventDefault();
-		const tokenval = await this.signInUser(
-			this.state.username,
-			this.state.password
-		);
 
-		console.log(tokenval);
+		if (this.state.username === '' || this.state.password === '') {
+			this.toggleFailMessageClass();
+		} else {
+			const tokenval = await this.signInUser(
+				this.state.username,
+				this.state.password
+			);
+			console.log(tokenval);
 
-		// if (tokenval) {
-		// 	// console.log('okokok');
-		// 	// this.props.parentCallback(true);
-		// 	this.setState({
-		// 		token: tokenval,
-		// 	});
-		// }
+			this.setState({ username: '' });
+			this.setState({ password: '' });
+
+			// <Link to="/myPage" />;
+		}
 	};
 
 	render() {
-		// const {} = this.state;
-
 		return (
 			<div className="signIn-wrapper">
 				<Header>
@@ -101,6 +102,16 @@ export default class SignInSetState extends React.Component {
 								/>
 								<FaEye onClick={this.managePasswordVisibility} />
 							</div>
+							<div
+								className={
+									this.state.failureMessage
+										? 'failure-message'
+										: 'failure-message-disabled'
+								}
+								onClick={this.toggleFailMessageClass}
+							>
+								<p>Failure: please check the login details.</p>
+							</div>
 						</label>
 						<div className="button-container">
 							{/* <Link to="/myPage"> */}
@@ -114,7 +125,3 @@ export default class SignInSetState extends React.Component {
 		);
 	}
 }
-
-// SignInSetState.propTypes = {
-// 	token: PropTypes.bool.isRequired,
-// };

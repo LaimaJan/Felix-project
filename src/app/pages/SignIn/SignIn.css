@@ -34,7 +34,7 @@ form label p {
 	color: var(--black);
 }
 
-form label:nth-child(2) p {
+form label:nth-child(2) {
 	margin-top: 20px;
 }
 
@@ -46,6 +46,16 @@ form label input {
 	padding: 5px 80px;
 }
 
+.failure-message p {
+	color: var(--red);
+	font-size: 20px;
+	padding-top: 10px;
+}
+
+.failure-message-disabled p {
+	visibility: hidden;
+}
+
 .password-icon-container {
 	display: flex;
 	flex-direction: row;
@@ -55,7 +65,7 @@ form label input {
 .button-container {
 	display: flex;
 	justify-content: center;
-	margin-top: 40px;
+	padding-top: 10px;
 }
 
 /* <FaEye/> */
