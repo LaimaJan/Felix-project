@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { withRouter } from '../../components/useParam/UseParams';
 
 import './MyPage.css';
 import logo from '../../images/logo.svg';
@@ -20,7 +21,6 @@ class MyPage extends React.Component {
 			error: false,
 			favorites: retrieveID,
 		};
-		// console.log(this.state.allFilms);
 
 		this.handleClick = this.handleClick.bind(this);
 	}
@@ -43,8 +43,32 @@ class MyPage extends React.Component {
 	}
 
 	singleMovieClicked = (id) => {
-		console.log(id);
+		console.log('Pries function: ' + id);
+
+		this.props.navigate(`/singleMovie/${id}`);
 	};
+
+	// fetchSingleMovie = () => {
+	// 	const singleMovieId = this.state.pressedMovie;
+	// 	console.log(' FETCHAS: ' + singleMovieId);
+
+	// const result = await fetch(
+	// 	'https://dummy-video-api.onrender.com/content/items/:itemId',
+	// 	{
+	// 		method: 'GET',
+	// 		headers: {
+	// 			Authorization: tokenNumber,
+	// 		},
+	// 		// body: {
+	// 		// 	id: pressedMovie,
+	// 		// },
+	// 	}
+	// );
+
+	// const url = `https://dummy-video-api.onrender.com/content/items/${singleMovieId}`;
+	// console.log(url);
+	// return fetch(url);
+	// };
 
 	async componentDidMount() {
 		this.setState({ loading: true });
@@ -97,7 +121,6 @@ class MyPage extends React.Component {
 						{error && <p>Whoops! Failed to Load! 🙊</p>}
 
 						{allFilms.map(({ title, id, image, description }) => (
-							// <Link to="/singleMovie">
 							<MovieCard
 								id={id}
 								key={id}
@@ -108,7 +131,6 @@ class MyPage extends React.Component {
 								onHandleClick={() => this.handleClick(id)}
 								singleMovie={() => this.singleMovieClicked(id)}
 							/>
-							// </Link>
 						))}
 					</div>
 
@@ -123,4 +145,4 @@ class MyPage extends React.Component {
 	}
 }
 
-export default MyPage;
+export default withRouter(MyPage);

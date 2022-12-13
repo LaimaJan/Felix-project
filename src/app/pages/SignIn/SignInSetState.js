@@ -1,13 +1,13 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import Header from '../../components/Header';
 import Button from '../../components/Button';
 import Footer from '../../components/Footer';
 import { FaEye } from 'react-icons/fa';
+import { withRouter } from '../../components/useParam/UseParams';
 
 import './SignIn.css';
 
-export default class SignInSetState extends React.Component {
+class SignInSetState extends React.Component {
 	constructor(props) {
 		super(props);
 		const retrieveToken = localStorage.getItem('token') || '';
@@ -69,6 +69,8 @@ export default class SignInSetState extends React.Component {
 
 			this.setState({ username: '' });
 			this.setState({ password: '' });
+
+			this.props.navigate('/myPage');
 		}
 	};
 
@@ -112,9 +114,7 @@ export default class SignInSetState extends React.Component {
 							</div>
 						</label>
 						<div className="button-container">
-							<Button type="submit">
-								<Link to="/myPage">Sign in</Link>
-							</Button>
+							<Button type="submit">Sign in</Button>
 						</div>
 					</form>
 				</div>
@@ -123,3 +123,5 @@ export default class SignInSetState extends React.Component {
 		);
 	}
 }
+
+export default withRouter(SignInSetState);

@@ -14,7 +14,7 @@ class App extends React.Component {
 					<Route path="/" element={<Home />} />
 					<Route path="/signIn" element={<SignInSetState />} />
 					<Route path="/myPage" element={<MyPage />} />
-					<Route path="/singleMovie" element={<SingleMovie />} />
+					<Route path="/singleMovie/:id" element={<SingleMovie />} />
 				</Routes>
 			</BrowserRouter>
 		);

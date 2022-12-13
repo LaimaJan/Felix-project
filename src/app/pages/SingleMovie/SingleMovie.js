@@ -4,29 +4,29 @@ import { Link } from 'react-router-dom';
 import Header from '../../components/Header';
 import Button from '../../components/Button';
 import Footer from '../../components/Footer';
+import { withRouter } from '../../components/useParam/UseParams';
+
 // import MovieCard from '../../components/MovieCard';
 // import { FaRegPlayCircle } from 'react-icons/fa';
 
 import './SingleMovie.css';
 
-export default class SingleMovie extends React.Component {
+class SingleMovie extends React.Component {
 	constructor(props) {
 		super(props);
 		const retrieveToken = localStorage.getItem('token') || '';
 
 		this.state = {
-			username: '',
-			password: '',
 			token: retrieveToken,
-			singleMovie: '',
-			pressedMovie: '',
 		};
-		console.log('Tokenas this.state');
-		console.log(this.state.token);
+		// console.log('Tokenas this.state');
+		// console.log(this.state.token);
 	}
 
 	async componentDidMount() {
 		this.setState({ loading: true });
+		const { id } = this.props.params;
+		console.log("url'o id: " + id);
 		try {
 			const tokenNumber = localStorage.getItem('token');
 			console.log('TOKENAS SingleMovie: ' + tokenNumber);
@@ -104,3 +104,7 @@ export default class SingleMovie extends React.Component {
 		);
 	}
 }
+
+export default withRouter(SingleMovie);
+
+// export default (props) => <SingleMovie {...props} params={useParams()} />;
