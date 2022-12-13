@@ -1,10 +1,10 @@
-.singleMovie-wrapper {
+/* .singleMovie-wrapper {
 	display: flex;
 	min-height: 100vh;
 	flex-direction: column;
 	justify-content: space-between;
 	background-color: var(--true-black);
-}
+} */
 
 .movie-card {
 	display: flex;
