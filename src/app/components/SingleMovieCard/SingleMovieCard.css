@@ -1,0 +1,59 @@
+.singleMovie-wrapper {
+	display: flex;
+	min-height: 100vh;
+	flex-direction: column;
+	justify-content: space-between;
+	background-color: var(--true-black);
+}
+
+.movie-card {
+	display: flex;
+	flex-direction: row;
+
+	margin: 80px 100px;
+}
+
+.movie-card-image-holder {
+	height: 100%;
+	width: 200px;
+	flex: 1;
+}
+
+.movie-card-image {
+	background-color: var(--white);
+	width: 100%;
+}
+
+.movie-card-content {
+	display: flex;
+	flex: 3;
+	flex-direction: column;
+	margin-left: 50px;
+}
+
+.film-title {
+	color: var(--white);
+	margin: 0 auto;
+	margin-bottom: 20px;
+
+	font-size: 32px;
+	font-weight: 700;
+}
+
+.film-summary {
+	color: var(--white);
+	font-size: 19px;
+	font-weight: 500;
+	display: -webkit-box;
+	-webkit-line-clamp: 3;
+}
+
+.movie-card-btn {
+	margin-top: 20px;
+	display: flex;
+	flex-direction: row;
+}
+
+button:nth-child(1) {
+	margin-right: 20px;
+}
