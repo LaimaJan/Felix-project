@@ -48,28 +48,6 @@ class MyPage extends React.Component {
 		this.props.navigate(`/singleMovie/${id}`);
 	};
 
-	// fetchSingleMovie = () => {
-	// 	const singleMovieId = this.state.pressedMovie;
-	// 	console.log(' FETCHAS: ' + singleMovieId);
-
-	// const result = await fetch(
-	// 	'https://dummy-video-api.onrender.com/content/items/:itemId',
-	// 	{
-	// 		method: 'GET',
-	// 		headers: {
-	// 			Authorization: tokenNumber,
-	// 		},
-	// 		// body: {
-	// 		// 	id: pressedMovie,
-	// 		// },
-	// 	}
-	// );
-
-	// const url = `https://dummy-video-api.onrender.com/content/items/${singleMovieId}`;
-	// console.log(url);
-	// return fetch(url);
-	// };
-
 	async componentDidMount() {
 		this.setState({ loading: true });
 		try {

@@ -1,5 +1,5 @@
 import React from 'react';
-// import logo from '../../images/logo.svg';
+import logo from '../../images/logo.svg';
 import { Link } from 'react-router-dom';
 import Header from '../../components/Header';
 import Button from '../../components/Button';
@@ -18,9 +18,14 @@ class SingleMovie extends React.Component {
 
 		this.state = {
 			token: retrieveToken,
+			singleMovie: [],
+			loading: false,
+			error: false,
+			favorites: [],
 		};
-		// console.log('Tokenas this.state');
-		// console.log(this.state.token);
+
+		console.log('singleMovie this.state');
+		console.log(this.state.singleMovie);
 	}
 
 	async componentDidMount() {
@@ -29,18 +34,15 @@ class SingleMovie extends React.Component {
 		console.log("url'o id: " + id);
 		try {
 			const tokenNumber = localStorage.getItem('token');
-			console.log('TOKENAS SingleMovie: ' + tokenNumber);
+			// console.log('TOKENAS SingleMovie: ' + tokenNumber);
 
 			const result = await fetch(
-				'https://dummy-video-api.onrender.com/content/items/:itemId',
+				`https://dummy-video-api.onrender.com/content/items/${id}`,
 				{
 					method: 'GET',
 					headers: {
 						Authorization: tokenNumber,
 					},
-					// body: {
-					// 	id: pressedMovie,
-					// },
 				}
 			);
 
@@ -61,7 +63,7 @@ class SingleMovie extends React.Component {
 	}
 
 	render() {
-		// const { loading, error, singleMovie, favorites } = this.state;
+		const { loading, error, singleMovie } = this.state;
 		return (
 			<div className="singleMovie-wrapper">
 				<Header>
@@ -70,27 +72,21 @@ class SingleMovie extends React.Component {
 					</Button>
 				</Header>
 				<main>
-					{/* {loading && <img src={logo} className="App-logo" alt="logo" />}
-						{error && <p>Whoops! Failed to Load! 🙊</p>} */}
-					<div className="movie-card">
+					{loading && <img src={logo} className="App-logo" alt="logo" />}
+					{error && <p>Whoops! Failed to Load! 🙊</p>}
+					<div className="movie-card" id={singleMovie.id}>
 						<div className="movie-card-image-holder">
 							<img
 								className="movie-card-image"
-								src="https://kbbookreviews867789450.files.wordpress.com/2021/01/17927395._sy475_.jpg"
-								alt="booktok"
+								src={singleMovie.image}
+								alt="our-movie"
 							></img>
 						</div>
 
 						<div className="movie-card-content">
 							<div className="movie-summary">
-								<p className="film-title">Spider-Man: Far from Home</p>
-								<p className="film-summary ">
-									Peter Parker and his friends go on a summer trip to Europe.
-									However, they will hardly be able to rest - Peter will have to
-									agree to help Nick Fury uncover the mystery of creatures that
-									cause natural disasters and destruction throughout the
-									continent.
-								</p>
+								<p className="film-title">{singleMovie.title}</p>
+								<p className="film-summary ">{singleMovie.description}</p>
 							</div>
 							<div className="movie-card-btn">
 								<Button>Watch</Button>
@@ -106,5 +102,3 @@ class SingleMovie extends React.Component {
 }
 
 export default withRouter(SingleMovie);
-
-// export default (props) => <SingleMovie {...props} params={useParams()} />;
