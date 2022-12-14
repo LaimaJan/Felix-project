@@ -8,8 +8,6 @@ import { withRouter } from '../../components/useParam/UseParams';
 import SingleMovieCard from '../../components/SingleMovieCard/SingleMovieCard';
 // import App from '../../App';
 
-// import { FaRegPlayCircle } from 'react-icons/fa';
-
 import './SingleMovie.css';
 
 class SingleMovie extends React.Component {
@@ -18,7 +16,6 @@ class SingleMovie extends React.Component {
 		console.log('MANO PROPS');
 		console.log(this.props);
 		const retrieveToken = localStorage.getItem('token') || '';
-		// const retrieveID = JSON.parse(localStorage.getItem('id')) || [];
 
 		this.state = {
 			token: retrieveToken,
@@ -31,25 +28,7 @@ class SingleMovie extends React.Component {
 
 		this.watchTrailer = this.watchTrailer.bind(this);
 		this.exitTrailer = this.exitTrailer.bind(this);
-		// this.handleClick = this.handleClick.bind(this);
 	}
-
-	// handleClick(id) {
-	// 	if (!this.state.favorites.includes(id)) {
-	// 		this.setState((prevState) => ({
-	// 			favorites: [...prevState.favorites, id],
-	// 		}));
-
-	// 		localStorage.setItem('id', JSON.stringify([...this.state.favorites, id]));
-	// 	} else {
-	// 		const filmIds = this.state.favorites.filter((movieId) => movieId !== id);
-	// 		localStorage.setItem('id', JSON.stringify(filmIds));
-
-	// 		this.setState({
-	// 			favorites: filmIds,
-	// 		});
-	// 	}
-	// }
 
 	watchTrailer() {
 		const currentState = this.state.openModal;
@@ -108,7 +87,7 @@ class SingleMovie extends React.Component {
 							title={singleMovie.title}
 							description={singleMovie.description}
 							image={singleMovie.image}
-							onHandleClick={this.props.onHandleClick(singleMovie.id)}
+							onHandleClick={() => this.props.onHandleClick(singleMovie.id)}
 							isFavorite={favorites.includes(singleMovie.id)}
 							clickWatchTrailer={this.watchTrailer}
 						/>

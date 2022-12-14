@@ -49,7 +49,7 @@ class App extends React.Component {
 						path="/myPage"
 						element={
 							<MyPage
-								onClick={this.handleClick}
+								onHandleClick={this.handleClick}
 								favorites={this.state.favorites}
 							/>
 						}
