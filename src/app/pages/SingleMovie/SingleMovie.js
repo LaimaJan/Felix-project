@@ -6,6 +6,7 @@ import Button from '../../components/Button';
 import Footer from '../../components/Footer';
 import { withRouter } from '../../components/useParam/UseParams';
 import SingleMovieCard from '../../components/SingleMovieCard/SingleMovieCard';
+// import App from '../../App';
 
 // import { FaRegPlayCircle } from 'react-icons/fa';
 
@@ -14,41 +15,48 @@ import './SingleMovie.css';
 class SingleMovie extends React.Component {
 	constructor(props) {
 		super(props);
+		console.log('MANO PROPS');
+		console.log(this.props);
 		const retrieveToken = localStorage.getItem('token') || '';
-		const retrieveID = JSON.parse(localStorage.getItem('id')) || [];
+		// const retrieveID = JSON.parse(localStorage.getItem('id')) || [];
 
 		this.state = {
 			token: retrieveToken,
 			singleMovie: [],
 			loading: false,
 			error: false,
-			favorites: retrieveID,
+			favorites: [],
 			openModal: false,
 		};
 
-		console.log('favorites this.state');
-		console.log(this.state.favorites);
+		this.watchTrailer = this.watchTrailer.bind(this);
+		this.exitTrailer = this.exitTrailer.bind(this);
+		// this.handleClick = this.handleClick.bind(this);
 	}
 
-	handleClick(id) {
-		if (!this.state.favorites.includes(id)) {
-			this.setState((prevState) => ({
-				favorites: [...prevState.favorites, id],
-			}));
+	// handleClick(id) {
+	// 	if (!this.state.favorites.includes(id)) {
+	// 		this.setState((prevState) => ({
+	// 			favorites: [...prevState.favorites, id],
+	// 		}));
 
-			localStorage.setItem('id', JSON.stringify([...this.state.favorites, id]));
-		} else {
-			const filmIds = this.state.favorites.filter((movieId) => movieId !== id);
-			localStorage.setItem('id', JSON.stringify(filmIds));
+	// 		localStorage.setItem('id', JSON.stringify([...this.state.favorites, id]));
+	// 	} else {
+	// 		const filmIds = this.state.favorites.filter((movieId) => movieId !== id);
+	// 		localStorage.setItem('id', JSON.stringify(filmIds));
 
-			this.setState({
-				favorites: filmIds,
-			});
-		}
+	// 		this.setState({
+	// 			favorites: filmIds,
+	// 		});
+	// 	}
+	// }
+
+	watchTrailer() {
+		const currentState = this.state.openModal;
+		this.setState({ openModal: !currentState });
 	}
 
-	WatchTrailer() {
-		console.log('clicked');
+	exitTrailer() {
 		const currentState = this.state.openModal;
 		this.setState({ openModal: !currentState });
 	}
@@ -56,10 +64,8 @@ class SingleMovie extends React.Component {
 	async componentDidMount() {
 		this.setState({ loading: true });
 		const { id } = this.props.params;
-		// console.log("url'o id: " + id);
 		try {
 			const tokenNumber = localStorage.getItem('token');
-			// console.log('TOKENAS SingleMovie: ' + tokenNumber);
 			const result = await fetch(
 				`https://dummy-video-api.onrender.com/content/items/${id}`,
 				{
@@ -73,8 +79,7 @@ class SingleMovie extends React.Component {
 				this.setState({ error: true });
 			} else {
 				let response = await result.json();
-				// console.log('RESPONSAS');
-				console.log(response);
+				// console.log(response);
 				this.setState({ singleMovie: response });
 			}
 		} catch (error) {
@@ -105,7 +110,7 @@ class SingleMovie extends React.Component {
 							image={singleMovie.image}
 							onHandleClick={() => this.handleClick(singleMovie.id)}
 							isFavorite={favorites.includes(singleMovie.id)}
-							clickWatchTrailer={this.WatchTrailer.bind(this)}
+							clickWatchTrailer={this.watchTrailer}
 						/>
 					</main>
 					<Footer />
@@ -114,6 +119,7 @@ class SingleMovie extends React.Component {
 					className={
 						this.state.openModal ? 'show-video-modal' : 'disable-video-modal'
 					}
+					onClick={this.exitTrailer}
 				>
 					<iframe
 						title="movieTrailer"

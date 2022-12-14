@@ -11,36 +11,39 @@ import Button from '../../components/Button';
 import MovieCard from '../../components/MovieCard';
 
 class MyPage extends React.Component {
-	constructor(props) {
+	constructor(props, { favorites }) {
 		super(props);
-		const retrieveID = JSON.parse(localStorage.getItem('id')) || [];
+		// const retrieveID = JSON.parse(localStorage.getItem('id')) || [];
 
 		this.state = {
 			allFilms: [],
 			loading: false,
 			error: false,
-			favorites: retrieveID,
+			favorites: [],
 		};
 
-		this.handleClick = this.handleClick.bind(this);
+		// this.handleClick = this.handleClick.bind(this);
+		this.singleMovieClicked = this.singleMovieClicked.bind(this);
+		console.log(props);
+		console.log(favorites);
 	}
 
-	handleClick(id) {
-		if (!this.state.favorites.includes(id)) {
-			this.setState((prevState) => ({
-				favorites: [...prevState.favorites, id],
-			}));
+	// handleClick(id) {
+	// 	if (!this.state.favorites.includes(id)) {
+	// 		this.setState((prevState) => ({
+	// 			favorites: [...prevState.favorites, id],
+	// 		}));
 
-			localStorage.setItem('id', JSON.stringify([...this.state.favorites, id]));
-		} else {
-			const filmIds = this.state.favorites.filter((movieId) => movieId !== id);
-			localStorage.setItem('id', JSON.stringify(filmIds));
+	// 		// localStorage.setItem('id', JSON.stringify([...this.state.favorites, id]));
+	// 	} else {
+	// 		const filmIds = this.state.favorites.filter((movieId) => movieId !== id);
+	// 		// localStorage.setItem('id', JSON.stringify(filmIds));
 
-			this.setState({
-				favorites: filmIds,
-			});
-		}
-	}
+	// 		this.setState({
+	// 			favorites: filmIds,
+	// 		});
+	// 	}
+	// }
 
 	singleMovieClicked = (id) => {
 		console.log('Pries function: ' + id);

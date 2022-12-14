@@ -29,7 +29,7 @@ iframe {
 	display: block;
 }
 
-/* @media (min-aspect-ratio: 3/4) {
+@media (min-aspect-ratio: 3/4) {
 	width: 80vw;
 	height: calc(80vw / 16 * 9);
-} */
+}
