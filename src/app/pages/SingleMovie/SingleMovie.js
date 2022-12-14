@@ -69,7 +69,7 @@ class SingleMovie extends React.Component {
 	}
 
 	render() {
-		const { loading, error, singleMovie, favorites } = this.state;
+		const { loading, error, singleMovie } = this.state;
 		return (
 			<div className="content-wrapper">
 				<div className="singleMovie-wrapper">
@@ -88,7 +88,7 @@ class SingleMovie extends React.Component {
 							description={singleMovie.description}
 							image={singleMovie.image}
 							onHandleClick={() => this.props.onHandleClick(singleMovie.id)}
-							isFavorite={favorites.includes(singleMovie.id)}
+							isFavorite={this.props.favorites.includes(singleMovie.id)}
 							clickWatchTrailer={this.watchTrailer}
 						/>
 					</main>

@@ -63,7 +63,7 @@ class MyPage extends React.Component {
 	}
 
 	render() {
-		const { loading, error, allFilms, favorites } = this.state;
+		const { loading, error, allFilms } = this.state;
 
 		return (
 			<div className="App">
@@ -87,7 +87,7 @@ class MyPage extends React.Component {
 								title={title}
 								description={description}
 								image={image}
-								isFavorite={favorites.includes(id)}
+								isFavorite={this.props.favorites.includes(id)}
 								onHandleClick={() => this.props.onHandleClick(id)}
 								singleMovie={() => this.singleMovieClicked(id)}
 							/>

@@ -43,7 +43,7 @@ class Home extends React.Component {
 	}
 
 	render() {
-		const { loading, error, freeFilms, favorites } = this.state;
+		const { loading, error, freeFilms } = this.state;
 
 		return (
 			<div className="App">
@@ -71,7 +71,7 @@ class Home extends React.Component {
 								title={title}
 								description={description}
 								image={image}
-								isFavorite={favorites.includes(id)}
+								isFavorite={this.props.favorites.includes(id)}
 								onHandleClick={() => this.props.onHandleClick(id)}
 							/>
 						))}
