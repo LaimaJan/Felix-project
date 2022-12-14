@@ -73,7 +73,11 @@ class Home extends React.Component {
 					</Button>
 				</Header>
 
-				<Hero className="hero" />
+				<Hero className="hero">
+					<Button>
+						<Link to="/createUser">Get Access</Link>
+					</Button>
+				</Hero>
 
 				<main>
 					<div className="main-content">
@@ -88,12 +92,14 @@ class Home extends React.Component {
 								description={description}
 								image={image}
 								isFavorite={favorites.includes(id)}
-								onHandleClick={() => this.handleClick(id)}
+								onHandleClick={this.props.onHandleClick(id)}
 							/>
 						))}
 					</div>
 					<div className="main-content-btn">
-						<Button>Get More Content </Button>
+						<Button>
+							<Link to="/createUser">Get More Content </Link>
+						</Button>
 					</div>
 				</main>
 

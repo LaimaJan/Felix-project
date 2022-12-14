@@ -108,7 +108,7 @@ class SingleMovie extends React.Component {
 							title={singleMovie.title}
 							description={singleMovie.description}
 							image={singleMovie.image}
-							onHandleClick={() => this.handleClick(singleMovie.id)}
+							onHandleClick={this.props.onHandleClick(singleMovie.id)}
 							isFavorite={favorites.includes(singleMovie.id)}
 							clickWatchTrailer={this.watchTrailer}
 						/>

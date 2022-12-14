@@ -109,7 +109,7 @@ class MyPage extends React.Component {
 								description={description}
 								image={image}
 								isFavorite={favorites.includes(id)}
-								onHandleClick={() => this.handleClick(id)}
+								onHandleClick={this.props.onHandleClick(id)}
 								singleMovie={() => this.singleMovieClicked(id)}
 							/>
 						))}

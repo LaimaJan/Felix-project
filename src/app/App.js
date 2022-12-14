@@ -5,6 +5,7 @@ import SingleMovie from './pages/SingleMovie/SingleMovie';
 import Home from './pages/Home/Home';
 import SignInSetState from './pages/SignIn/SignInSetState';
 import MyPage from './pages/MyPage/MyPage';
+import CreateUser from './pages/CreateUser/CreateUser';
 
 class App extends React.Component {
 	constructor(props) {
@@ -17,16 +18,13 @@ class App extends React.Component {
 	}
 
 	handleClick(id) {
+		console.log(id);
 		if (!this.state.favorites.includes(id)) {
 			this.setState((prevState) => ({
 				favorites: [...prevState.favorites, id],
 			}));
-
-			// localStorage.setItem('id', JSON.stringify([...this.state.favorites, id]));
 		} else {
 			const filmIds = this.state.favorites.filter((movieId) => movieId !== id);
-			// localStorage.setItem('id', JSON.stringify(filmIds));
-
 			this.setState({
 				favorites: filmIds,
 			});
@@ -41,7 +39,7 @@ class App extends React.Component {
 						path="/"
 						element={
 							<Home
-								onHandleClick={() => this.handleClick}
+								onHandleClick={this.handleClick}
 								favorites={this.state.favorites}
 							/>
 						}
@@ -51,7 +49,7 @@ class App extends React.Component {
 						path="/myPage"
 						element={
 							<MyPage
-								onHandleClick={() => this.handleClick}
+								onClick={this.handleClick}
 								favorites={this.state.favorites}
 							/>
 						}
@@ -60,11 +58,12 @@ class App extends React.Component {
 						path="/singleMovie/:id"
 						element={
 							<SingleMovie
-								onHandleClick={() => this.handleClick}
+								onHandleClick={this.handleClick}
 								favorites={this.state.favorites}
 							/>
 						}
 					/>
+					<Route path="/createUser" element={<CreateUser />} />
 				</Routes>
 			</BrowserRouter>
 		);
