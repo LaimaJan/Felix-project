@@ -7,8 +7,7 @@ import { FaEye } from 'react-icons/fa';
 
 import './SignIn.css';
 
-function SignInUseState() {
-	// const retrieveToken = localStorage.getItem('token') || '';
+function SignInUseState({ updateToken }) {
 	const navigate = useNavigate();
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
@@ -18,7 +17,7 @@ function SignInUseState() {
 	const [loading, setLoading] = useState(false);
 	const errorMessage = {
 		empty: 'Fields cannot be Empty',
-		credentials: 'Check login details',
+		// credentials: 'Check login details',
 		request: 'Oops! Something expolded!',
 	}[errorType];
 
@@ -55,8 +54,7 @@ function SignInUseState() {
 					console.log('Tokenas');
 					console.log(token);
 
-					localStorage.setItem('token', token);
-
+					updateToken(token);
 					navigate('/myPage');
 				}
 			} catch (error) {
@@ -112,7 +110,7 @@ function SignInUseState() {
 						<Button disabled={loading} type="submit">
 							Sign in
 						</Button>
-						{errorMessage && <p className="Login__error">{errorMessage}</p>}
+						{errorMessage && <p className="login-error">{errorMessage}</p>}
 					</div>
 				</form>
 			</div>

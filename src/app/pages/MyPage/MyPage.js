@@ -9,11 +9,12 @@ import Hero from '../../components/Hero';
 import Button from '../../components/Button';
 import MovieCard from '../../components/MovieCard';
 
-function MyPage({ favorites, onHandleClick }) {
+function MyPage({ favorites, onHandleClick, token }) {
 	const navigate = useNavigate();
 	const [allFilms, setAllFilms] = useState([]);
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState(false);
+	const tokenNumber = token;
 
 	const singleMovieClicked = (id) => {
 		console.log('Pries function: ' + id);
@@ -29,9 +30,6 @@ function MyPage({ favorites, onHandleClick }) {
 		setLoading(false);
 
 		try {
-			const tokenNumber = localStorage.getItem('token');
-			// console.log('TOKENAS MYPAGE: ' + tokenNumber);
-
 			const result = await fetch(
 				'https://dummy-video-api.onrender.com/content/items',
 				{
@@ -54,11 +52,11 @@ function MyPage({ favorites, onHandleClick }) {
 		} finally {
 			setLoading(false);
 		}
-	}, []);
+	}, [tokenNumber]);
 
 	useEffect(() => {
 		fetchData();
-	});
+	}, [fetchData]);
 
 	return (
 		<div className="App">

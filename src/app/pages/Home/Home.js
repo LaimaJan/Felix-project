@@ -38,7 +38,7 @@ function Home({ favorites, onHandleClick }) {
 
 	useEffect(() => {
 		fetchData();
-	});
+	}, [fetchData]);
 
 	return (
 		<div className="App">

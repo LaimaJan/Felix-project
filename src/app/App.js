@@ -8,7 +8,18 @@ import MyPage from './pages/MyPage/MyPage';
 import CreateUser from './pages/CreateUser/CreateUser';
 
 function App() {
-	const [favorites, setFavorites] = useState([]);
+	const [favorites, setFavorites] = useState(
+		localStorage.getItem('favorites') || []
+	);
+
+	const [token, setToken] = useState(
+		window.localStorage.getItem('token' || [])
+	);
+
+	const updateToken = (token) => {
+		window.localStorage.setItem('token', token);
+		setToken(token);
+	};
 
 	const handleClick = (id) => {
 		console.log(id);
@@ -20,6 +31,7 @@ function App() {
 			newFavorites = newFavorites.concat(id);
 		}
 
+		window.localStorage.setItem('favorites', JSON.stringify(newFavorites));
 		setFavorites(newFavorites);
 	};
 
@@ -30,10 +42,20 @@ function App() {
 					path="/"
 					element={<Home onHandleClick={handleClick} favorites={favorites} />}
 				/>
-				<Route path="/signIn" element={<SignInUseState />} />
+				<Route
+					path="/signIn"
+					element={<SignInUseState updateToken={updateToken} />}
+				/>
 				<Route
 					path="/myPage"
-					element={<MyPage onHandleClick={handleClick} favorites={favorites} />}
+					element={
+						<MyPage
+							onHandleClick={handleClick}
+							favorites={favorites}
+							updateToken={updateToken}
+							token={token}
+						/>
+					}
 				/>
 				<Route
 					path="/singleMovie/:id"
@@ -42,7 +64,7 @@ function App() {
 					}
 				/>
 				<Route path="/createUser" element={<CreateUser />} />
-				<Route path="*" element={<p>Your Lost! No Page Here!</p>} />
+				<Route path="*" element={<p>Your'e Lost! Go Back!</p>} />
 			</Routes>
 		</BrowserRouter>
 	);
