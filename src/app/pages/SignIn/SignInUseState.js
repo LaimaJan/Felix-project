@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../../components/Header';
 import Button from '../../components/Button';
@@ -14,35 +14,16 @@ function SignInUseState() {
 	const [password, setPassword] = useState('');
 	const [failureMessage, setFailureMessage] = useState(false);
 	const [hidePassword, setHidePassword] = useState(true);
+	const [errorType, setErrorType] = useState();
+	const [loading, setLoading] = useState(false);
+	const errorMessage = {
+		empty: 'Fields cannot be Empty',
+		credentials: 'Check login details',
+		request: 'Oops! Something expolded!',
+	}[errorType];
 
 	const managePasswordVisibility = () => {
-		setHidePassword(!this.state.hidePassword);
-	};
-
-	const signInUser = async (username, password) => {
-		return fetch('https://dummy-video-api.onrender.com/auth/login', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({ username: username, password: password }),
-		}).then(async function (data) {
-			let response = await data.json();
-			// console.log('Tokenas');
-			// console.log(response);
-
-			localStorage.setItem('token', response.token);
-			// setToken(response.token);
-		});
-	};
-
-	useEffect(() => {
-		signInUser();
-	});
-
-	const toggleFailMessageClass = () => {
-		const currentState = failureMessage;
-		setFailureMessage(!currentState);
+		setHidePassword(!hidePassword);
 	};
 
 	const handleSubmit = async (e) => {
@@ -51,13 +32,44 @@ function SignInUseState() {
 		if (username === '' || password === '') {
 			toggleFailMessageClass();
 		} else {
-			const tokenval = await signInUser(username, password);
-			console.log(tokenval);
+			setLoading(true);
+			try {
+				const response = await fetch(
+					'https://dummy-video-api.onrender.com/auth/login',
+					{
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json',
+						},
+						body: JSON.stringify({ username, password }),
+					}
+				);
 
-			setUsername({ username: '' });
-			setPassword({ password: '' });
+				if (response.status > 399 && response.status < 600) {
+					setErrorType(
+						response.status === 400 ? toggleFailMessageClass() : 'request'
+					);
+				} else {
+					const { token } = await response.json();
+
+					console.log('Tokenas');
+					console.log(token);
+
+					localStorage.setItem('token', token);
+
+					navigate('/myPage');
+				}
+			} catch (error) {
+				setErrorType('request');
+			} finally {
+				setLoading(false);
+			}
 		}
-		navigate('/myPage');
+	};
+
+	const toggleFailMessageClass = () => {
+		const currentState = failureMessage;
+		setFailureMessage(!currentState);
 	};
 
 	return (
@@ -97,7 +109,10 @@ function SignInUseState() {
 						</div>
 					</label>
 					<div className="button-container">
-						<Button type="submit">Sign in</Button>
+						<Button disabled={loading} type="submit">
+							Sign in
+						</Button>
+						{errorMessage && <p className="Login__error">{errorMessage}</p>}
 					</div>
 				</form>
 			</div>

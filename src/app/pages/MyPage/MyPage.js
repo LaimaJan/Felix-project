@@ -9,7 +9,7 @@ import Hero from '../../components/Hero';
 import Button from '../../components/Button';
 import MovieCard from '../../components/MovieCard';
 
-function MyPage({ favorites = [], handleClick = () => {} }) {
+function MyPage({ favorites, onHandleClick }) {
 	const navigate = useNavigate();
 	const [allFilms, setAllFilms] = useState([]);
 	const [loading, setLoading] = useState(false);
@@ -83,7 +83,7 @@ function MyPage({ favorites = [], handleClick = () => {} }) {
 							description={description}
 							image={image}
 							isFavorite={favorites.includes(id)}
-							onHandleClick={() => handleClick(id)}
+							onHandleClick={() => onHandleClick(id)}
 							singleMovie={() => singleMovieClicked(id)}
 						/>
 					))}

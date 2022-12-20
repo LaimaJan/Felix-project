@@ -1,5 +1,6 @@
 import './Button.css';
 import cx from 'classnames';
+import { Link } from 'react-router-dom';
 
 // function Button({ className, placeholder, id, onClick }) {
 // 	return (
@@ -11,7 +12,17 @@ import cx from 'classnames';
 
 // export default Button;
 
-function Button({ children, type = 'button', size, design, onClick }) {
+function Button({
+	children,
+	type = 'button',
+	size,
+	design,
+	onClick,
+	to,
+	disabled,
+}) {
+	const Component = to ? Link : 'button';
+	const buttonType = to ? null : type;
 	const className = cx('Button', {
 		'Button--small': size === 'small',
 		'Button--outline': design === 'outline',
@@ -23,9 +34,15 @@ function Button({ children, type = 'button', size, design, onClick }) {
 	// 	// const className = ["Button", sizeClass, designClass].filter(Boolean).join(" ");
 
 	return (
-		<button onClick={onClick} type={type} className={className}>
+		<Component
+			disabled={disabled}
+			to={to}
+			onClick={onClick}
+			type={buttonType}
+			className={className}
+		>
 			{children}
-		</button>
+		</Component>
 	);
 }
 export default Button;

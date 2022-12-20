@@ -8,12 +8,12 @@ import SingleMovieCard from '../../components/SingleMovieCard/SingleMovieCard';
 
 import './SingleMovie.css';
 
-function SingleMovie({ favorites = [], handleClick = () => {} }) {
+function SingleMovie({ favorites, onHandleClick }) {
 	const navigate = useNavigate();
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState(false);
 	const [openModal, setOpenModal] = useState(false);
-	const [singleMovie, setSingleMovie] = useState();
+	const [singleMovie, setSingleMovie] = useState([]);
 
 	const logOut = () => {
 		localStorage.removeItem('token');
@@ -31,11 +31,6 @@ function SingleMovie({ favorites = [], handleClick = () => {} }) {
 	};
 
 	const { id } = useParams();
-	console.log(id);
-
-	useEffect(() => {
-		fetchData(id);
-	});
 
 	const fetchData = useCallback(async (id) => {
 		setLoading(false);
@@ -63,8 +58,12 @@ function SingleMovie({ favorites = [], handleClick = () => {} }) {
 		} finally {
 			setLoading(false);
 		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
+
+	useEffect(() => {
+		// console.log(id);
+		fetchData(id);
+	}, [id, fetchData]);
 
 	return (
 		<div className="content-wrapper">
@@ -81,7 +80,7 @@ function SingleMovie({ favorites = [], handleClick = () => {} }) {
 						title={singleMovie.title}
 						description={singleMovie.description}
 						image={singleMovie.image}
-						onHandleClick={() => handleClick(singleMovie.id)}
+						onHandleClick={() => onHandleClick(singleMovie.id)}
 						isFavorite={favorites.includes(singleMovie.id)}
 						clickWatchTrailer={watchTrailer}
 					/>

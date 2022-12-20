@@ -8,6 +8,12 @@
 	cursor: pointer;
 }
 
+.Button:disabled {
+	background: var(--gray);
+	color: var(--white);
+	cursor: not-allowed;
+}
+
 .Button--small {
 	padding: 7px 24px;
 }

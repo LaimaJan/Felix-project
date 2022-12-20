@@ -9,7 +9,7 @@ import Hero from '../../components/Hero';
 import Button from '../../components/Button';
 import MovieCard from '../../components/MovieCard';
 
-function Home({ favorites = [], handleClick = () => {} }) {
+function Home({ favorites, onHandleClick }) {
 	const [freeFilms, setFreeFilms] = useState([]);
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState(false);
@@ -57,7 +57,7 @@ function Home({ favorites = [], handleClick = () => {} }) {
 			<main>
 				<div className="main-content">
 					{loading && <img src={logo} className="App-logo" alt="logo" />}
-					{error && <p>Whoops! Failed to Load! 🙊</p>}
+					{error && <p>Whoops! Failed to Load!</p>}
 
 					{freeFilms.map(({ title, id, image, description }) => (
 						<MovieCard
@@ -67,7 +67,7 @@ function Home({ favorites = [], handleClick = () => {} }) {
 							description={description}
 							image={image}
 							isFavorite={favorites.includes(id)}
-							onHandleClick={() => handleClick(id)}
+							onHandleClick={() => onHandleClick(id)}
 						/>
 					))}
 				</div>
