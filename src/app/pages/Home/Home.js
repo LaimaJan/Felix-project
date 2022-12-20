@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import './App.css';
@@ -9,20 +9,14 @@ import Hero from '../../components/Hero';
 import Button from '../../components/Button';
 import MovieCard from '../../components/MovieCard';
 
-class Home extends React.Component {
-	constructor(props) {
-		super(props);
+function Home({ favorites = [], handleClick = () => {} }) {
+	const [freeFilms, setFreeFilms] = useState([]);
+	const [loading, setLoading] = useState(false);
+	const [error, setError] = useState(false);
 
-		this.state = {
-			freeFilms: [],
-			loading: false,
-			error: false,
-			favorites: [],
-		};
-	}
+	const fetchData = useCallback(async () => {
+		setLoading(false);
 
-	async componentDidMount() {
-		this.setState({ loading: true });
 		try {
 			const result = await fetch(
 				'https://dummy-video-api.onrender.com/content/free-items'
@@ -30,63 +24,63 @@ class Home extends React.Component {
 			console.log(result);
 
 			if (result.status >= 400 && result.status <= 599) {
-				this.setState({ error: true });
+				throw new Error('failed to load');
 			} else {
 				const json = await result.json();
-				this.setState({ freeFilms: json });
+				setFreeFilms(json);
 			}
 		} catch (error) {
-			this.setState({ error: true });
+			setError(true);
 		} finally {
-			this.setState({ loading: false });
+			setLoading(false);
 		}
-	}
+	}, []);
 
-	render() {
-		const { loading, error, freeFilms } = this.state;
+	useEffect(() => {
+		fetchData();
+	});
 
-		return (
-			<div className="App">
-				<Header className="header">
+	return (
+		<div className="App">
+			<Header className="header">
+				<Button>
+					<Link to="/signIn">Sign in</Link>
+				</Button>
+			</Header>
+
+			<Hero className="hero">
+				<Button>
+					<Link to="/createUser">Get Access</Link>
+				</Button>
+			</Hero>
+
+			<main>
+				<div className="main-content">
+					{loading && <img src={logo} className="App-logo" alt="logo" />}
+					{error && <p>Whoops! Failed to Load! 🙊</p>}
+
+					{freeFilms.map(({ title, id, image, description }) => (
+						<MovieCard
+							id={id}
+							key={id}
+							title={title}
+							description={description}
+							image={image}
+							isFavorite={favorites.includes(id)}
+							onHandleClick={() => handleClick(id)}
+						/>
+					))}
+				</div>
+				<div className="main-content-btn">
 					<Button>
-						<Link to="/signIn">Sign in</Link>
+						<Link to="/createUser">Get More Content </Link>
 					</Button>
-				</Header>
+				</div>
+			</main>
 
-				<Hero className="hero">
-					<Button>
-						<Link to="/createUser">Get Access</Link>
-					</Button>
-				</Hero>
-
-				<main>
-					<div className="main-content">
-						{loading && <img src={logo} className="App-logo" alt="logo" />}
-						{error && <p>Whoops! Failed to Load! 🙊</p>}
-
-						{freeFilms.map(({ title, id, image, description }) => (
-							<MovieCard
-								id={id}
-								key={id}
-								title={title}
-								description={description}
-								image={image}
-								isFavorite={this.props.favorites.includes(id)}
-								onHandleClick={() => this.props.onHandleClick(id)}
-							/>
-						))}
-					</div>
-					<div className="main-content-btn">
-						<Button>
-							<Link to="/createUser">Get More Content </Link>
-						</Button>
-					</div>
-				</main>
-
-				<Footer />
-			</div>
-		);
-	}
+			<Footer />
+		</div>
+	);
 }
 
 export default Home;

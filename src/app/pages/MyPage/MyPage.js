@@ -1,6 +1,5 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { withRouter } from '../../components/useParam/UseParams';
+import { useState, useCallback, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 import './MyPage.css';
 import logo from '../../images/logo.svg';
@@ -10,30 +9,25 @@ import Hero from '../../components/Hero';
 import Button from '../../components/Button';
 import MovieCard from '../../components/MovieCard';
 
-class MyPage extends React.Component {
-	constructor(props, { favorites }) {
-		super(props);
+function MyPage({ favorites = [], handleClick = () => {} }) {
+	const navigate = useNavigate();
+	const [allFilms, setAllFilms] = useState([]);
+	const [loading, setLoading] = useState(false);
+	const [error, setError] = useState(false);
 
-		this.state = {
-			allFilms: [],
-			loading: false,
-			error: false,
-			favorites: [],
-		};
-
-		this.singleMovieClicked = this.singleMovieClicked.bind(this);
-		console.log(props);
-		console.log(favorites);
-	}
-
-	singleMovieClicked = (id) => {
+	const singleMovieClicked = (id) => {
 		console.log('Pries function: ' + id);
 
-		this.props.navigate(`/singleMovie/${id}`);
+		navigate(`/singleMovie/${id}`);
 	};
 
-	async componentDidMount() {
-		this.setState({ loading: true });
+	const logOut = () => {
+		localStorage.removeItem('token');
+	};
+
+	const fetchData = useCallback(async () => {
+		setLoading(false);
+
 		try {
 			const tokenNumber = localStorage.getItem('token');
 			// console.log('TOKENAS MYPAGE: ' + tokenNumber);
@@ -49,60 +43,60 @@ class MyPage extends React.Component {
 			);
 
 			if (result.status >= 400 && result.status <= 599) {
-				this.setState({ error: true });
+				setError(true);
 			} else {
 				let response = await result.json();
 
-				this.setState({ allFilms: response });
+				setAllFilms(response);
 			}
 		} catch (error) {
-			this.setState({ error: true });
+			setError(true);
 		} finally {
-			this.setState({ loading: false });
+			setLoading(false);
 		}
-	}
+	}, []);
 
-	render() {
-		const { loading, error, allFilms } = this.state;
+	useEffect(() => {
+		fetchData();
+	});
 
-		return (
-			<div className="App">
-				<Header className="header">
-					<Button>
-						<Link to="/">Logout</Link>
-					</Button>
-				</Header>
+	return (
+		<div className="App">
+			<Header className="header">
+				<Link to="/">
+					<Button onClick={logOut}>Logout</Button>
+				</Link>
+			</Header>
 
-				<Hero className="hero" />
+			<Hero className="hero" />
 
-				<main>
-					<div className="main-content">
-						{loading && <img src={logo} className="App-logo" alt="logo" />}
-						{error && <p>Whoops! Failed to Load! 🙊</p>}
+			<main>
+				<div className="main-content">
+					{loading && <img src={logo} className="App-logo" alt="logo" />}
+					{error && <p>Whoops! Failed to Load! 🙊</p>}
 
-						{allFilms.map(({ title, id, image, description }) => (
-							<MovieCard
-								id={id}
-								key={id}
-								title={title}
-								description={description}
-								image={image}
-								isFavorite={this.props.favorites.includes(id)}
-								onHandleClick={() => this.props.onHandleClick(id)}
-								singleMovie={() => this.singleMovieClicked(id)}
-							/>
-						))}
-					</div>
+					{allFilms.map(({ title, id, image, description }) => (
+						<MovieCard
+							id={id}
+							key={id}
+							title={title}
+							description={description}
+							image={image}
+							isFavorite={favorites.includes(id)}
+							onHandleClick={() => handleClick(id)}
+							singleMovie={() => singleMovieClicked(id)}
+						/>
+					))}
+				</div>
 
-					<div className="main-content-btn">
-						<Button>Get More Content </Button>
-					</div>
-				</main>
+				<div className="main-content-btn">
+					<Button>Get More Content </Button>
+				</div>
+			</main>
 
-				<Footer />
-			</div>
-		);
-	}
+			<Footer />
+		</div>
+	);
 }
 
-export default withRouter(MyPage);
+export default MyPage;
