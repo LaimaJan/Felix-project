@@ -1,0 +1,117 @@
+Header {
+	border-bottom: 1px solid var(--gray);
+}
+
+.App-wrapper {
+	display: flex;
+	min-height: 100vh;
+	flex-direction: column;
+	justify-content: space-between;
+	background-color: var(--black);
+}
+
+.main-content-wrapper {
+	display: flex;
+	flex: 1;
+	flex-direction: column;
+	align-content: center;
+	justify-content: center;
+	min-width: 100vw;
+	background-color: var(--true-black);
+}
+
+.form-actions-wrapper {
+	margin: 0 auto;
+	display: flex;
+	flex-direction: column;
+	align-content: center;
+	justify-content: center;
+	background-color: var(--true-black);
+}
+
+.row-of-actions {
+	margin: 0;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-evenly;
+	border: 1px solid var(--red);
+	border-top-right-radius: 10px;
+	border-top-left-radius: 10px;
+}
+
+.row-of-actions > div {
+	padding-top: 10px;
+	padding-bottom: 10px;
+	box-sizing: border-box;
+	width: 100%;
+	text-align: center;
+}
+
+.row-of-actions > div > p {
+	font-size: 18px;
+	font-weight: 700;
+}
+
+.row-of-actions > div > a {
+	font-size: 18px;
+	font-weight: 700;
+	text-decoration: none;
+}
+
+.create-user {
+	background-color: var(--red);
+	border-top-left-radius: 5px;
+}
+
+.pick-a-plan {
+	border-right: 1px solid var(--red);
+}
+
+.createUser-form {
+	margin: 0;
+	padding: 20px 80px;
+	border-radius: 0px;
+	border: 1px solid var(--red);
+	background-color: var(--gray);
+
+	border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;
+
+	display: flex;
+	flex-direction: column;
+}
+
+.createUser-form label p {
+	font-size: 26px;
+	font-weight: 700;
+	line-height: 29px;
+	color: var(--black);
+	padding-bottom: 8px;
+	padding-top: 15px;
+}
+
+.createUser-form label input {
+	font-size: 24px;
+	font-weight: 700;
+	line-height: 29px;
+	color: var(--black);
+	padding: 10px 260px;
+	border: none;
+	border-radius: 5px;
+}
+
+.icon-container {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+
+.continue-button-container {
+	display: flex;
+	justify-content: right;
+	padding-top: 30px;
+}
+
+svg {
+	font-size: 35px;
+}

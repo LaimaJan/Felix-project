@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import Button from '../../components/Button';
 import { FaEye } from 'react-icons/fa';
 
-import './CreateUser.css';
+import './Payment.css';
 
 function CreateUser() {
 	const [hidePassword, setHidePassword] = useState(true);
@@ -13,13 +13,30 @@ function CreateUser() {
 	const [repeatPassword, setRepeatPassword] = useState('');
 	const [email, setEmail] = useState('');
 
-	let activeClassName = 'underline';
+	// let activeStyle = {
+	// 	textDecoration: 'underline',
+	// };
+	// let activeClassName = 'underline';
 
-	const handleSubmit = async (e) => {
-		e.preventDefault();
-
-		console.log('My email: ' + email);
-	};
+	// const fetchData = useCallback(async () => {
+	// this.setState({ loading: true });
+	// try {
+	// 	const result = await fetch(
+	// 		'https://dummy-video-api.onrender.com/content/free-items'
+	// 	);
+	// 	console.log(result);
+	// 	if (result.status >= 400 && result.status <= 599) {
+	// 		this.setState({ error: true });
+	// 	} else {
+	// 		const json = await result.json();
+	// 		this.setState({ freeFilms: json });
+	// 	}
+	// } catch (error) {
+	// 	this.setState({ error: true });
+	// } finally {
+	// 	this.setState({ loading: false });
+	// }
+	// });
 
 	const managePasswordVisibility = () => {
 		setHidePassword(!hidePassword);
@@ -36,7 +53,7 @@ function CreateUser() {
 			<div className="main-content-wrapper">
 				<div className="form-actions-wrapper">
 					<div className="row-of-actions">
-						<div className="create-user">
+						<div className="createUser">
 							{/* <NavLink
 								to="createUser"
 								style={({ isActive }) => (isActive ? activeStyle : undefined)}
@@ -46,27 +63,29 @@ function CreateUser() {
 							<p>Create User</p>
 						</div>
 						<div className="pick-a-plan">
-							<NavLink
+							{/* <NavLink
 								to="pickPlan"
 								style={({ isActive }) =>
 									isActive ? activeClassName : undefined
 								}
 							>
 								Pick a Plan
-							</NavLink>
+							</NavLink> */}
+							<p>Pick a Plan</p>
 						</div>
-						<div className="payment">
-							<NavLink
+						<div className="planPayment">
+							{/* <NavLink
 								to="payment"
 								style={({ isActive }) =>
 									isActive ? activeClassName : undefined
 								}
 							>
 								Payment
-							</NavLink>
+							</NavLink> */}
+							<p>Payment</p>
 						</div>
 					</div>
-					<form className="createUser-form" onSubmit={handleSubmit}>
+					<form className="createUser-form">
 						<label>
 							<p>Email</p>
 							<input

@@ -12,7 +12,7 @@
 	min-width: 600px;
 }
 
-form {
+.signIn-form {
 	margin: 0 auto;
 	background-color: var(--gray);
 	margin-top: 140px;
@@ -27,18 +27,18 @@ form {
 	flex-direction: column;
 }
 
-form label p {
+.signIn-form label p {
 	font-size: 24px;
 	font-weight: 700;
 	line-height: 29px;
 	color: var(--black);
 }
 
-form label:nth-child(2) {
+.signIn-form label:nth-child(2) {
 	margin-top: 20px;
 }
 
-form label input {
+.signIn-form label input {
 	font-size: 24px;
 	font-weight: 500;
 	line-height: 29px;

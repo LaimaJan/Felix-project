@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Header from '../../components/Header';
 import Button from '../../components/Button';
 import Footer from '../../components/Footer';
@@ -10,14 +10,13 @@ import './SignIn.css';
 function SignInUseState({ updateToken }) {
 	const navigate = useNavigate();
 	const [username, setUsername] = useState('');
+	const redirectLink = useLocation().state || '/myPage';
 	const [password, setPassword] = useState('');
 	const [failureMessage, setFailureMessage] = useState(false);
 	const [hidePassword, setHidePassword] = useState(true);
 	const [errorType, setErrorType] = useState();
 	const [loading, setLoading] = useState(false);
 	const errorMessage = {
-		empty: 'Fields cannot be Empty',
-		// credentials: 'Check login details',
 		request: 'Oops! Something expolded!',
 	}[errorType];
 
@@ -55,7 +54,7 @@ function SignInUseState({ updateToken }) {
 					console.log(token);
 
 					updateToken(token);
-					navigate('/myPage');
+					navigate(redirectLink);
 				}
 			} catch (error) {
 				setErrorType('request');
@@ -76,7 +75,7 @@ function SignInUseState({ updateToken }) {
 				<Button>Sign in</Button>
 			</Header>
 			<div className="signIn-container">
-				<form onSubmit={handleSubmit}>
+				<form className="signIn-form" onSubmit={handleSubmit}>
 					<label>
 						<p>Username</p>
 						<input

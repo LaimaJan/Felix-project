@@ -3,9 +3,12 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import SingleMovie from './pages/SingleMovie/SingleMovie';
 import Home from './pages/Home/Home';
-import SignInUseState from './pages/SignIn/SignInUseState';
+import SignInUseState from './pages/SignIn/SignIn';
 import MyPage from './pages/MyPage/MyPage';
 import CreateUser from './pages/CreateUser/CreateUser';
+import PrivateRoute from './components/PrivateRoute/PrivateRoute';
+import PickPlan from './pages/PickPlan/PickPlan';
+import Payment from './pages/Payment/Payment';
 
 function App() {
 	const [favorites, setFavorites] = useState(
@@ -46,17 +49,20 @@ function App() {
 					path="/signIn"
 					element={<SignInUseState updateToken={updateToken} />}
 				/>
-				<Route
-					path="/myPage"
-					element={
-						<MyPage
-							onHandleClick={handleClick}
-							favorites={favorites}
-							updateToken={updateToken}
-							token={token}
-						/>
-					}
-				/>
+				<Route element={<PrivateRoute token={token} />}>
+					<Route
+						path="/myPage"
+						element={
+							<MyPage
+								onHandleClick={handleClick}
+								favorites={favorites}
+								updateToken={updateToken}
+								token={token}
+							/>
+						}
+					/>
+				</Route>
+
 				<Route
 					path="/singleMovie/:id"
 					element={
@@ -64,7 +70,9 @@ function App() {
 					}
 				/>
 				<Route path="/createUser" element={<CreateUser />} />
-				<Route path="*" element={<p>Your'e Lost! Go Back!</p>} />
+				<Route path="/createUser/pickPlan" element={<PickPlan />} />
+				<Route path="/createUser/pickPlan/payment" element={<Payment />} />
+				<Route path="*" element={<p>Theres's no page, go back!</p>} />
 			</Routes>
 		</BrowserRouter>
 	);
