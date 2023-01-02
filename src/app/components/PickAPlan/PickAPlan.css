@@ -1,0 +1,75 @@
+.cards-content {
+	margin: 0;
+	/* padding: 10px 20px; */
+	min-width: 150px;
+	border-radius: var(--default-radius);
+	background-color: var(--true-white);
+
+	display: flex;
+	flex-direction: column;
+}
+
+input[type='checkbox'] {
+	width: 25px;
+	height: 25px;
+	border-radius: 50%;
+	vertical-align: middle;
+	border: 1px solid var(--gray);
+	background-color: var(--white);
+	appearance: none;
+	-webkit-appearance: none;
+	outline: none;
+	cursor: pointer;
+}
+
+input[type='checkbox']:checked {
+	appearance: auto;
+	clip-path: circle(50% at 50% 50%);
+	background-color: var(--gray);
+}
+
+.plan-wrapper {
+	display: flex;
+	flex-direction: column;
+	text-align: center;
+	padding: 15px 40px;
+}
+
+.plan-name p,
+.plan-cost-per-month p,
+.plan-sale-percentage p,
+.cost-after-sale {
+	color: var(--true-black);
+}
+
+.plan-name p {
+	font-size: 23px;
+}
+.plan-name {
+	margin-bottom: 30px;
+}
+
+.plan-cost-per-month p:first-child {
+	font-size: 30px;
+	margin-bottom: 5px;
+}
+
+.plan-cost-per-month p:nth-child(2) {
+	font-size: 22px;
+}
+
+.plan-cost-per-month {
+	margin-bottom: 60px;
+}
+
+.cost-strike {
+	text-decoration: line-through;
+	color: var(--red);
+	margin-right: 10px;
+}
+
+.plan-whole-cost {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}

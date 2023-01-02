@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import Button from '../../components/Button';
 import { FaEye } from 'react-icons/fa';
+import NavLinkTo from '../../components/NavLink/Navlink';
 
 import './CreateUser.css';
 
@@ -37,33 +38,35 @@ function CreateUser() {
 				<div className="form-actions-wrapper">
 					<div className="row-of-actions">
 						<div className="create-user">
-							{/* <NavLink
+							<NavLinkTo
 								to="createUser"
-								style={({ isActive }) => (isActive ? activeStyle : undefined)}
+								style={({ isActive }) =>
+									isActive ? activeClassName : undefined
+								}
 							>
 								Create User
-							</NavLink> */}
-							<p>Create User</p>
+							</NavLinkTo>
+							{/* <p>Create User</p> */}
 						</div>
 						<div className="pick-a-plan">
-							<NavLink
+							<NavLinkTo
 								to="pickPlan"
 								style={({ isActive }) =>
 									isActive ? activeClassName : undefined
 								}
 							>
 								Pick a Plan
-							</NavLink>
+							</NavLinkTo>
 						</div>
 						<div className="payment">
-							<NavLink
+							<NavLinkTo
 								to="payment"
 								style={({ isActive }) =>
 									isActive ? activeClassName : undefined
 								}
 							>
 								Payment
-							</NavLink>
+							</NavLinkTo>
 						</div>
 					</div>
 					<form className="createUser-form" onSubmit={handleSubmit}>

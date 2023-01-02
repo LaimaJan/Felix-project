@@ -1,9 +1,11 @@
 import { useState, useCallback, useEffect } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import Button from '../../components/Button';
 import logo from '../../images/logo.svg';
+import NavLinkTo from '../../components/NavLink/Navlink';
+import PickAPlan from '../../components/PickAPlan/PickPlan';
 
 import './PickPlan.css';
 
@@ -11,7 +13,7 @@ function CreateUser() {
 	// let activeStyle = {
 	// 	textDecoration: 'underline',
 	// };
-	// const [allPlans, setAllPlans] = useState([]);
+	const [allPlans, setAllPlans] = useState([]);
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState(false);
 
@@ -29,8 +31,8 @@ function CreateUser() {
 			if (result.status >= 400 && result.status <= 599) {
 				throw new Error('failed to load');
 			} else {
-				// const json = await result.json();
-				// setAllPlans(json);
+				const json = await result.json();
+				setAllPlans(json);
 			}
 		} catch (error) {
 			setError(true);
@@ -55,60 +57,46 @@ function CreateUser() {
 				<div className="actions-wrapper">
 					<div className="row-of-actions">
 						<div className="createUser">
-							{/* <NavLink
-								to="createUser"
-								style={({ isActive }) =>
-									isActive ? activeClassName : undefined
-								}
-							>
-								Create User
-							</NavLink> */}
 							<p>Create User</p>
 						</div>
 						<div className="pickPlan">
-							{/* <NavLink
-								to="pickPlan"
-								style={({ isActive }) =>
-									isActive ? activeClassName : undefined
-								}
-							>
-								Pick a Plan
-							</NavLink> */}
 							<p>Pick a Plan</p>
 						</div>
 						<div className="payment">
-							<NavLink
+							<NavLinkTo
 								to="payment"
 								style={({ isActive }) =>
 									isActive ? activeClassName : undefined
 								}
 							>
 								Payment
-							</NavLink>
-							{/* <p>Payment</p> */}
+							</NavLinkTo>
 						</div>
 					</div>
 					<div className="payment-plans">
 						{loading && <img src={logo} className="App-logo" alt="logo" />}
 						{error && <p>Whoops! Failed to Load!</p>}
-						<div className="card-content">
-							<div className="check-box"></div>
-							<div className="plan-wrapper ">
-								<div className="plan-name">
-									<p></p>
-								</div>
-								<div className="plan-cost-per-month">
-									<p></p>
-								</div>
-								<div className="plan-sale-percentage">
-									<p></p>
-								</div>
-								<div className="plan-whole-cost">
-									<p className="cost-strike"></p>
-									<p className="cost-after-sale"></p>
-								</div>
-							</div>
-						</div>
+
+						{allPlans.map(
+							({
+								id,
+								title,
+								monthlyCost,
+								totalCost,
+								frequencyUnit,
+								frequencyInterval,
+							}) => (
+								<PickAPlan
+									id={id}
+									key={id}
+									title={title}
+									monthlyCost={monthlyCost}
+									totalCost={totalCost}
+									frequencyUnit={frequencyUnit}
+									frequencyInterval={frequencyInterval}
+								/>
+							)
+						)}
 					</div>
 				</div>
 			</div>
