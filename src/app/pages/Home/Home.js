@@ -1,5 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { API } from '../../../constants';
+import { connect } from 'react-redux';
 
 import './App.css';
 import logo from '../../images/logo.svg';
@@ -18,9 +20,7 @@ function Home({ favorites, onHandleClick }) {
 		setLoading(false);
 
 		try {
-			const result = await fetch(
-				'https://dummy-video-api.onrender.com/content/free-items'
-			);
+			const result = await fetch(API.freeMovies);
 			console.log(result);
 
 			if (result.status >= 400 && result.status <= 599) {
@@ -67,7 +67,7 @@ function Home({ favorites, onHandleClick }) {
 							description={description}
 							image={image}
 							isFavorite={favorites.includes(id)}
-							onHandleClick={() => onHandleClick(id)}
+							onHandleClick={() => onHandleClick(id, favorites.includes(id))}
 						/>
 					))}
 				</div>
@@ -83,4 +83,24 @@ function Home({ favorites, onHandleClick }) {
 	);
 }
 
-export default Home;
+function mapStateToProps(state) {
+	console.log('Redux mapStateToProps', state.content.favorites);
+
+	return {
+		favorites: state.content.favorites || [],
+	};
+}
+
+function mapDispatchToProps(dispatch) {
+	return {
+		onHandleClick: (id, isFavorite) => {
+			if (isFavorite) {
+				dispatch({ type: 'ADD_FAVORITE', id });
+			} else {
+				dispatch({ type: 'REMOVE_FAVORITE', id });
+			}
+		},
+	};
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);
