@@ -95,9 +95,9 @@ function mapDispatchToProps(dispatch) {
 	return {
 		onHandleClick: (id, isFavorite) => {
 			if (isFavorite) {
-				dispatch({ type: 'ADD_FAVORITE', id });
-			} else {
 				dispatch({ type: 'REMOVE_FAVORITE', id });
+			} else {
+				dispatch({ type: 'ADD_FAVORITE', id });
 			}
 		},
 	};

@@ -1,6 +1,9 @@
 import { useState, useCallback, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
+import { API } from '../../../constants';
+import { connect } from 'react-redux';
+
 import './MyPage.css';
 import logo from '../../images/logo.svg';
 import Header from '../../components/Header';
@@ -30,15 +33,12 @@ function MyPage({ favorites, onHandleClick, token }) {
 		setLoading(false);
 
 		try {
-			const result = await fetch(
-				'https://dummy-video-api.onrender.com/content/items',
-				{
-					method: 'GET',
-					headers: {
-						Authorization: tokenNumber,
-					},
-				}
-			);
+			const result = await fetch(API.paidMovies, {
+				method: 'GET',
+				headers: {
+					Authorization: tokenNumber,
+				},
+			});
 
 			if (result.status >= 400 && result.status <= 599) {
 				setError(true);
@@ -81,7 +81,7 @@ function MyPage({ favorites, onHandleClick, token }) {
 							description={description}
 							image={image}
 							isFavorite={favorites.includes(id)}
-							onHandleClick={() => onHandleClick(id)}
+							onHandleClick={() => onHandleClick(id, favorites.includes(id))}
 							singleMovie={() => singleMovieClicked(id)}
 						/>
 					))}
@@ -97,4 +97,24 @@ function MyPage({ favorites, onHandleClick, token }) {
 	);
 }
 
-export default MyPage;
+function mapStateToProps(state) {
+	console.log('Redux mapStateToProps', state.content.favorites);
+
+	return {
+		favorites: state.content.favorites || [],
+	};
+}
+
+function mapDispatchToProps(dispatch) {
+	return {
+		onHandleClick: (id, isFavorite) => {
+			if (isFavorite) {
+				dispatch({ type: 'REMOVE_FAVORITE', id });
+			} else {
+				dispatch({ type: 'ADD_FAVORITE', id });
+			}
+		},
+	};
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(MyPage);
