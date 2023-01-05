@@ -28,10 +28,8 @@ function Home({
 
 		try {
 			const result = await fetch(API.freeMovies);
-			console.log(result);
 
 			if (result.status >= 400 && result.status <= 599) {
-				console.log('KAZKAS');
 				throw new Error('failed to load');
 			} else {
 				const json = await result.json();
@@ -39,9 +37,6 @@ function Home({
 			}
 		} catch (error) {
 			pageLoadingError(true);
-
-			// console.log('LABAS DIENAS');
-			// pageLoading(false);
 		} finally {
 			pageLoading(false);
 		}
@@ -98,8 +93,8 @@ function mapStateToProps(state) {
 	console.log(state.content.favorites);
 	return {
 		favorites: state.content.favorites || [],
-		loadingState: state.loading.loading || [],
-		errorState: state.loading.error || [],
+		loadingState: state.loading.loading,
+		errorState: state.loading.error,
 	};
 }
 
@@ -113,11 +108,9 @@ function mapDispatchToProps(dispatch) {
 			}
 		},
 		pageLoading: (loading) => {
-			console.log('kazkas');
-			// if (loading)
-			//  {
-			dispatch({ type: 'LOADING_MESSAGE', loading });
-			// }
+			if (loading) {
+				dispatch({ type: 'LOADING_MESSAGE', loading });
+			}
 		},
 		pageLoadingError: (error) => {
 			if (error) {

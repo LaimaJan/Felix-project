@@ -10,7 +10,12 @@ import { connect } from 'react-redux';
 
 import './SignIn.css';
 
-function SignInUseState({ updateToken }) {
+function SignInUseState({
+	updateToken,
+	pageLoading,
+	loadingState,
+	// pageLoadingError,
+}) {
 	const navigate = useNavigate();
 	const [username, setUsername] = useState('');
 	const redirectLink = useLocation().state || '/myPage';
@@ -18,7 +23,7 @@ function SignInUseState({ updateToken }) {
 	const [failureMessage, setFailureMessage] = useState(false);
 	const [hidePassword, setHidePassword] = useState(true);
 	const [errorType, setErrorType] = useState();
-	const [loading, setLoading] = useState(false);
+	// const [loading, setLoading] = useState(false);
 	const errorMessage = {
 		request: 'Oops! Something went wrong!',
 	}[errorType];
@@ -33,7 +38,7 @@ function SignInUseState({ updateToken }) {
 		if (username === '' || password === '') {
 			toggleFailMessageClass();
 		} else {
-			setLoading(true);
+			pageLoading(true);
 			try {
 				const response = await fetch(
 					'https://dummy-video-api.onrender.com/auth/login',
@@ -59,7 +64,7 @@ function SignInUseState({ updateToken }) {
 			} catch (error) {
 				setErrorType('request');
 			} finally {
-				setLoading(false);
+				pageLoading(false);
 			}
 		}
 	};
@@ -106,7 +111,7 @@ function SignInUseState({ updateToken }) {
 						</div>
 					</label>
 					<div className="button-container">
-						<Button disabled={loading} type="submit">
+						<Button disabled={loadingState} type="submit">
 							Sign in
 						</Button>
 						{errorMessage && <p className="login-error">{errorMessage}</p>}
@@ -121,6 +126,8 @@ function SignInUseState({ updateToken }) {
 function mapStateToProps(state) {
 	return {
 		token: state.token.token || [],
+		loadingState: state.loading.loading,
+		errorState: state.loading.error,
 	};
 }
 
@@ -129,6 +136,16 @@ function mapDispatchToProps(dispatch) {
 		updateToken: (token) => {
 			if (token) {
 				dispatch({ type: 'UPDATE_TOKEN', token });
+			}
+		},
+		pageLoading: (loading) => {
+			if (loading) {
+				dispatch({ type: 'LOADING_MESSAGE', loading });
+			}
+		},
+		pageLoadingError: (error) => {
+			if (error) {
+				dispatch({ type: 'ERROR_MESSAGE', error });
 			}
 		},
 	};

@@ -1,13 +1,7 @@
-// import { useState } from 'react';
-
 const INITIAL_STATE = {
 	loading: false,
 	error: false,
 };
-// console.log()
-
-// const [loading, setLoading] = useState(false);
-// const [error, setError] = useState(false);
 
 function pageLoadReducer(state = INITIAL_STATE, action) {
 	switch (action.type) {

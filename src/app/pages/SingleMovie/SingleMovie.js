@@ -11,10 +11,18 @@ import { connect } from 'react-redux';
 
 import './SingleMovie.css';
 
-function SingleMovie({ favorites, onHandleClick }) {
+function SingleMovie({
+	favorites,
+	onHandleClick,
+	pageLoading,
+	pageLoadingError,
+	loadingState,
+	errorState,
+	token,
+}) {
 	const navigate = useNavigate();
-	const [loading, setLoading] = useState(false);
-	const [error, setError] = useState(false);
+	// const [loading, setLoading] = useState(false);
+	// const [error, setError] = useState(false);
 	const [openModal, setOpenModal] = useState(false);
 	const [singleMovie, setSingleMovie] = useState([]);
 
@@ -35,30 +43,35 @@ function SingleMovie({ favorites, onHandleClick }) {
 
 	const { id } = useParams();
 
-	const fetchData = useCallback(async (id) => {
-		setLoading(false);
+	const fetchData = useCallback(
+		async (id) => {
+			pageLoading(false);
+			console.log(token);
 
-		try {
-			const tokenNumber = localStorage.getItem('token');
-			const result = await fetch(`${API.paidMovies}/${id}`, {
-				method: 'GET',
-				headers: {
-					Authorization: tokenNumber,
-				},
-			});
-			if (result.status >= 400 && result.status <= 599) {
-				setError(true);
-			} else {
-				let response = await result.json();
-				// console.log(response);
-				setSingleMovie(response);
+			try {
+				const tokenNumber = token;
+				const result = await fetch(`${API.paidMovies}/${id}`, {
+					method: 'GET',
+					headers: {
+						Authorization: tokenNumber,
+					},
+				});
+				if (result.status >= 400 && result.status <= 599) {
+					pageLoadingError(true);
+				} else {
+					let response = await result.json();
+					// console.log(response);
+					setSingleMovie(response);
+				}
+			} catch (error) {
+				pageLoadingError(true);
+				pageLoading(false);
+			} finally {
+				pageLoading(false);
 			}
-		} catch (error) {
-			setError(true);
-		} finally {
-			setLoading(false);
-		}
-	}, []);
+		},
+		[pageLoading, pageLoadingError]
+	);
 
 	useEffect(() => {
 		// console.log(id);
@@ -72,8 +85,8 @@ function SingleMovie({ favorites, onHandleClick }) {
 					<Button onClick={logOut}>Logout</Button>
 				</Header>
 				<main>
-					{loading && <img src={logo} className="App-logo" alt="logo" />}
-					{error && <p>Whoops! Failed to Load! 🙊</p>}
+					{loadingState && <img src={logo} className="App-logo" alt="logo" />}
+					{errorState && <p>Whoops! Failed to Load! 🙊</p>}
 					<SingleMovieCard
 						id={singleMovie.id}
 						key={singleMovie.id}
@@ -103,8 +116,12 @@ function SingleMovie({ favorites, onHandleClick }) {
 }
 
 function mapStateToProps(state) {
+	console.log(state.token.token);
 	return {
 		favorites: state.content.favorites || [],
+		loadingState: state.loading.loading,
+		errorState: state.loading.error,
+		token: state.token.token || [],
 	};
 }
 
@@ -115,6 +132,21 @@ function mapDispatchToProps(dispatch) {
 				dispatch({ type: 'REMOVE_FAVORITE', id });
 			} else {
 				dispatch({ type: 'ADD_FAVORITE', id });
+			}
+		},
+		pageLoading: (loading) => {
+			if (loading) {
+				dispatch({ type: 'LOADING_MESSAGE', loading });
+			}
+		},
+		pageLoadingError: (error) => {
+			if (error) {
+				dispatch({ type: 'ERROR_MESSAGE', error });
+			}
+		},
+		logOut: (token) => {
+			if (token) {
+				dispatch({ type: 'DELETE_TOKEN', token });
 			}
 		},
 	};
