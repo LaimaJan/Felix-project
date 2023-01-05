@@ -1,4 +1,5 @@
 import { Navigate, Outlet, useHref } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 function PrivateRoute({ token }) {
 	const href = useHref();
@@ -10,4 +11,10 @@ function PrivateRoute({ token }) {
 	return <Outlet />;
 }
 
-export default PrivateRoute;
+function mapStateToProps(state) {
+	return {
+		token: state.token.token || [],
+	};
+}
+
+export default connect(mapStateToProps)(PrivateRoute);

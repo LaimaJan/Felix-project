@@ -53,13 +53,8 @@ function SignInUseState({ updateToken }) {
 				} else {
 					const { token } = await response.json();
 
-					// console.log('Tokenas');
-					console.log('TOKENAS signIN page', token);
-
 					updateToken(token);
-					console.log('BEFORE REDIRECT LINK', redirectLink);
 					navigate(redirectLink);
-					console.log('AFTER REDIRECT LINK');
 				}
 			} catch (error) {
 				setErrorType('request');
@@ -124,7 +119,6 @@ function SignInUseState({ updateToken }) {
 }
 
 function mapStateToProps(state) {
-	// console.log(state.token);
 	return {
 		token: state.token.token || [],
 	};

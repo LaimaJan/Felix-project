@@ -5,7 +5,6 @@ const FIRST_STATE = {
 };
 
 function reducer(state = FIRST_STATE, action) {
-	// console.log('Reducer.JS', action);
 	switch (action.type) {
 		case 'ADD_FAVORITE':
 			const newFavoriteMovies = state.favorites.concat(action.id);

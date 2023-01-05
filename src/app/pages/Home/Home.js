@@ -11,30 +11,41 @@ import Hero from '../../components/Hero';
 import Button from '../../components/Button';
 import MovieCard from '../../components/MovieCard';
 
-function Home({ favorites, onHandleClick }) {
+function Home({
+	favorites,
+	onHandleClick,
+	pageLoading,
+	pageLoadingError,
+	loadingState,
+	errorState,
+}) {
 	const [freeFilms, setFreeFilms] = useState([]);
-	const [loading, setLoading] = useState(false);
-	const [error, setError] = useState(false);
+	// const [loading, setLoading] = useState(false);
+	// const [error, setError] = useState(false);
 
 	const fetchData = useCallback(async () => {
-		setLoading(false);
+		pageLoading(false);
 
 		try {
 			const result = await fetch(API.freeMovies);
 			console.log(result);
 
 			if (result.status >= 400 && result.status <= 599) {
+				console.log('KAZKAS');
 				throw new Error('failed to load');
 			} else {
 				const json = await result.json();
 				setFreeFilms(json);
 			}
 		} catch (error) {
-			setError(true);
+			pageLoadingError(true);
+
+			// console.log('LABAS DIENAS');
+			// pageLoading(false);
 		} finally {
-			setLoading(false);
+			pageLoading(false);
 		}
-	}, []);
+	}, [pageLoading, pageLoadingError]);
 
 	useEffect(() => {
 		fetchData();
@@ -56,8 +67,8 @@ function Home({ favorites, onHandleClick }) {
 
 			<main>
 				<div className="main-content">
-					{loading && <img src={logo} className="App-logo" alt="logo" />}
-					{error && <p>Whoops! Failed to Load!</p>}
+					{loadingState && <img src={logo} className="App-logo" alt="logo" />}
+					{errorState && <p>Whoops! Failed to Load!</p>}
 
 					{freeFilms.map(({ title, id, image, description }) => (
 						<MovieCard
@@ -87,6 +98,8 @@ function mapStateToProps(state) {
 	console.log(state.content.favorites);
 	return {
 		favorites: state.content.favorites || [],
+		loadingState: state.loading.loading || [],
+		errorState: state.loading.error || [],
 	};
 }
 
@@ -97,6 +110,16 @@ function mapDispatchToProps(dispatch) {
 				dispatch({ type: 'REMOVE_FAVORITE', id });
 			} else {
 				dispatch({ type: 'ADD_FAVORITE', id });
+			}
+		},
+		pageLoading: (loading) => {
+			if (loading) {
+				dispatch({ type: 'LOADING_MESSAGE', loading });
+			}
+		},
+		pageLoadingError: (error) => {
+			if (error) {
+				dispatch({ type: 'ERROR_MESSAGE', error });
 			}
 		},
 	};
