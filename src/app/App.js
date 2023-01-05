@@ -1,4 +1,4 @@
-import { useState } from 'react';
+// import { useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
 // import { FAVORITES_STORAGE } from '../constants';
@@ -19,14 +19,14 @@ function App() {
 	// 	localStorage.getItem(FAVORITES_STORAGE) || []
 	// );
 
-	const [token, setToken] = useState(
-		window.localStorage.getItem('token' || [])
-	);
+	// const [token, setToken] = useState(
+	// 	window.localStorage.getItem('token' || [])
+	// );
 
-	const updateToken = (token) => {
-		window.localStorage.setItem('token', token);
-		setToken(token);
-	};
+	// const updateToken = (token) => {
+	// 	window.localStorage.setItem('token', token);
+	// 	setToken(token);
+	// };
 
 	// const handleClick = (id) => {
 	// 	console.log(id);
@@ -50,14 +50,21 @@ function App() {
 			<BrowserRouter>
 				<Routes>
 					<Route path="/" element={<Home />} />
+					<Route path="/signIn" element={<SignInUseState />} />
 					<Route
-						path="/signIn"
-						element={<SignInUseState updateToken={updateToken} />}
-					/>
-					<Route element={<PrivateRoute token={token} />}>
+						element={
+							<PrivateRoute
+							// token={token}
+							/>
+						}
+					>
 						<Route
 							path="/myPage"
-							element={<MyPage updateToken={updateToken} token={token} />}
+							element={
+								<MyPage
+								//  updateToken={updateToken} token={token}
+								/>
+							}
 						/>
 					</Route>
 

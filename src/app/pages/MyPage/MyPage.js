@@ -12,7 +12,7 @@ import Hero from '../../components/Hero';
 import Button from '../../components/Button';
 import MovieCard from '../../components/MovieCard';
 
-function MyPage({ favorites, onHandleClick, token }) {
+function MyPage({ favorites, onHandleClick, token, logOut }) {
 	const navigate = useNavigate();
 	const [allFilms, setAllFilms] = useState([]);
 	const [loading, setLoading] = useState(false);
@@ -25,9 +25,9 @@ function MyPage({ favorites, onHandleClick, token }) {
 		navigate(`/singleMovie/${id}`);
 	};
 
-	const logOut = () => {
-		localStorage.removeItem('token');
-	};
+	// const logOut = () => {
+	// 	localStorage.removeItem('token');
+	// };
 
 	const fetchData = useCallback(async () => {
 		setLoading(false);
@@ -62,7 +62,7 @@ function MyPage({ favorites, onHandleClick, token }) {
 		<div className="App">
 			<Header className="header">
 				<Link to="/">
-					<Button onClick={logOut}>Logout</Button>
+					<Button onClick={logOut(token)}>Logout</Button>
 				</Link>
 			</Header>
 
@@ -98,10 +98,9 @@ function MyPage({ favorites, onHandleClick, token }) {
 }
 
 function mapStateToProps(state) {
-	console.log('Redux mapStateToProps', state.content.favorites);
-
 	return {
 		favorites: state.content.favorites || [],
+		token: state.token.token || [],
 	};
 }
 
@@ -112,6 +111,11 @@ function mapDispatchToProps(dispatch) {
 				dispatch({ type: 'REMOVE_FAVORITE', id });
 			} else {
 				dispatch({ type: 'ADD_FAVORITE', id });
+			}
+		},
+		logOut: (token) => {
+			if (token) {
+				dispatch({ type: 'DELETE_TOKEN', token });
 			}
 		},
 	};

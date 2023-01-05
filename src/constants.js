@@ -1,6 +1,7 @@
 // import React from 'react';
 
 export const FAVORITES_STORAGE = 'favorites';
+export const TOKEN_STORAGE = 'token';
 
 const API_DOMAIN = 'https://dummy-video-api.onrender.com';
 

@@ -5,7 +5,7 @@ const FIRST_STATE = {
 };
 
 function reducer(state = FIRST_STATE, action) {
-	console.log('Reducer.JS', action);
+	// console.log('Reducer.JS', action);
 	switch (action.type) {
 		case 'ADD_FAVORITE':
 			const newFavoriteMovies = state.favorites.concat(action.id);
@@ -15,6 +15,7 @@ function reducer(state = FIRST_STATE, action) {
 				JSON.stringify(newFavoriteMovies)
 			);
 			return { ...state, favorites: state.favorites.concat(action.id) };
+
 		case 'REMOVE_FAVORITE': {
 			const newFavoriteMovies = state.favorites.filter(
 				(movieId) => movieId !== action.id

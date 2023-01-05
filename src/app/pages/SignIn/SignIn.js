@@ -5,6 +5,9 @@ import Button from '../../components/Button';
 import Footer from '../../components/Footer';
 import { FaEye } from 'react-icons/fa';
 
+// import { API } from '../../../constants';
+import { connect } from 'react-redux';
+
 import './SignIn.css';
 
 function SignInUseState({ updateToken }) {
@@ -17,7 +20,7 @@ function SignInUseState({ updateToken }) {
 	const [errorType, setErrorType] = useState();
 	const [loading, setLoading] = useState(false);
 	const errorMessage = {
-		request: 'Oops! Something expolded!',
+		request: 'Oops! Something went wrong!',
 	}[errorType];
 
 	const managePasswordVisibility = () => {
@@ -50,11 +53,13 @@ function SignInUseState({ updateToken }) {
 				} else {
 					const { token } = await response.json();
 
-					console.log('Tokenas');
-					console.log(token);
+					// console.log('Tokenas');
+					console.log('TOKENAS signIN page', token);
 
 					updateToken(token);
+					console.log('BEFORE REDIRECT LINK', redirectLink);
 					navigate(redirectLink);
+					console.log('AFTER REDIRECT LINK');
 				}
 			} catch (error) {
 				setErrorType('request');
@@ -118,4 +123,21 @@ function SignInUseState({ updateToken }) {
 	);
 }
 
-export default SignInUseState;
+function mapStateToProps(state) {
+	// console.log(state.token);
+	return {
+		token: state.token.token || [],
+	};
+}
+
+function mapDispatchToProps(dispatch) {
+	return {
+		updateToken: (token) => {
+			if (token) {
+				dispatch({ type: 'UPDATE_TOKEN', token });
+			}
+		},
+	};
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SignInUseState);

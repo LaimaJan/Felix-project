@@ -84,8 +84,7 @@ function Home({ favorites, onHandleClick }) {
 }
 
 function mapStateToProps(state) {
-	console.log('Redux mapStateToProps', state.content.favorites);
-
+	console.log(state.content.favorites);
 	return {
 		favorites: state.content.favorites || [],
 	};
