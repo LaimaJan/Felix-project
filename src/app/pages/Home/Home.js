@@ -113,9 +113,11 @@ function mapDispatchToProps(dispatch) {
 			}
 		},
 		pageLoading: (loading) => {
-			if (loading) {
-				dispatch({ type: 'LOADING_MESSAGE', loading });
-			}
+			console.log('kazkas');
+			// if (loading)
+			//  {
+			dispatch({ type: 'LOADING_MESSAGE', loading });
+			// }
 		},
 		pageLoadingError: (error) => {
 			if (error) {

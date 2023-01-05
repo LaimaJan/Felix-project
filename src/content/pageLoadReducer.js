@@ -12,10 +12,10 @@ const INITIAL_STATE = {
 function pageLoadReducer(state = INITIAL_STATE, action) {
 	switch (action.type) {
 		case 'ERROR_MESSAGE':
-			console.log(action);
-			return { ...state, error: true };
+			return { ...state, error: action.error };
 		case 'LOADING_MESSAGE':
-			return { ...state, loading: true };
+			console.log(action);
+			return { ...state, loading: action.loading };
 
 		default:
 			return state;
