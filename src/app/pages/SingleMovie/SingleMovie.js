@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
 import logo from '../../images/logo.svg';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import Header from '../../components/Header';
 import Button from '../../components/Button';
 import Footer from '../../components/Footer';
@@ -19,17 +19,18 @@ function SingleMovie({
 	loadingState,
 	errorState,
 	token,
+	logOut,
 }) {
-	const navigate = useNavigate();
+	// const navigate = useNavigate();
 	// const [loading, setLoading] = useState(false);
 	// const [error, setError] = useState(false);
 	const [openModal, setOpenModal] = useState(false);
 	const [singleMovie, setSingleMovie] = useState([]);
 
-	const logOut = () => {
-		localStorage.removeItem('token');
-		navigate(`/`);
-	};
+	// const logOut = () => {
+	// 	localStorage.removeItem('token');
+	// 	navigate(`/`);
+	// };
 
 	const watchTrailer = () => {
 		const currentState = openModal;
@@ -46,7 +47,6 @@ function SingleMovie({
 	const fetchData = useCallback(
 		async (id) => {
 			pageLoading(true);
-			console.log('token in singleMovie.js: ' + token);
 
 			try {
 				const tokenNumber = token;
@@ -60,7 +60,6 @@ function SingleMovie({
 					pageLoadingError(true);
 				} else {
 					let response = await result.json();
-					console.log('response fetch in singleMovie.js: ' + response);
 					setSingleMovie(response);
 				}
 			} catch (error) {
@@ -82,7 +81,9 @@ function SingleMovie({
 		<div className="content-wrapper">
 			<div className="singleMovie-wrapper">
 				<Header>
-					<Button onClick={logOut}>Logout</Button>
+					<Link to="/">
+						<Button onClick={() => logOut(token)}>Logout</Button>
+					</Link>
 				</Header>
 				<main>
 					{loadingState && <img src={logo} className="App-logo" alt="logo" />}
@@ -116,7 +117,6 @@ function SingleMovie({
 }
 
 function mapStateToProps(state) {
-	console.log(state.token.token);
 	return {
 		favorites: state.content.favorites || [],
 		loadingState: state.loading.loading,

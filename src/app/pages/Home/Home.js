@@ -88,9 +88,6 @@ function Home({
 }
 
 function mapStateToProps(state) {
-	console.log(
-		'Home.js mapStateToProps - favorites from state: ' + state.content.favorites
-	);
 	return {
 		favorites: state.content.favorites || [],
 		loadingState: state.loading.loading,
@@ -108,14 +105,10 @@ function mapDispatchToProps(dispatch) {
 			}
 		},
 		pageLoading: (loading) => {
-			if (loading) {
-				dispatch({ type: 'LOADING_MESSAGE', loading });
-			}
+			dispatch({ type: 'LOADING_MESSAGE', loading });
 		},
 		pageLoadingError: (error) => {
-			if (error) {
-				dispatch({ type: 'ERROR_MESSAGE', error });
-			}
+			dispatch({ type: 'ERROR_MESSAGE', error });
 		},
 	};
 }

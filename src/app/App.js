@@ -15,60 +15,20 @@ import Payment from './pages/Payment/Payment';
 import store from '../state/index';
 
 function App() {
-	// const [favorites, setFavorites] = useState(
-	// 	localStorage.getItem(FAVORITES_STORAGE) || []
-	// );
-
-	// const [token, setToken] = useState(
-	// 	window.localStorage.getItem('token' || [])
-	// );
-
-	// const updateToken = (token) => {
-	// 	window.localStorage.setItem('token', token);
-	// 	setToken(token);
-	// };
-
-	// const handleClick = (id) => {
-	// 	console.log(id);
-	// 	let newFavorites = [...favorites];
-
-	// 	if (favorites.includes(id)) {
-	// 		newFavorites = favorites.filter((movieId) => movieId !== id);
-	// 	} else {
-	// 		newFavorites = newFavorites.concat(id);
-	// 	}
-
-	// 	window.localStorage.setItem(
-	// 		FAVORITES_STORAGE,
-	// 		JSON.stringify(newFavorites)
-	// 	);
-	// 	setFavorites(newFavorites);
-	// };
-
 	return (
 		<Provider store={store}>
 			<BrowserRouter>
 				<Routes>
 					<Route path="/" element={<Home />} />
 					<Route path="/signIn" element={<SignInUseState />} />
-					<Route
-						element={
-							<PrivateRoute
-							// token={token}
-							/>
-						}
-					>
-						<Route
-							path="/myPage"
-							element={
-								<MyPage
-								//  updateToken={updateToken} token={token}
-								/>
-							}
-						/>
+					<Route element={<PrivateRoute />}>
+						<Route path="/myPage" element={<MyPage />} />
 					</Route>
 
-					<Route path="/singleMovie/:id" element={<SingleMovie />} />
+					<Route element={<PrivateRoute />}>
+						<Route path="/singleMovie/:id" element={<SingleMovie />} />
+					</Route>
+					{/* <Route path="/singleMovie/:id" element={<SingleMovie />} /> */}
 					<Route path="/createUser" element={<CreateUser />} />
 					<Route path="/createUser/pickPlan" element={<PickPlan />} />
 					<Route path="/createUser/pickPlan/payment" element={<Payment />} />

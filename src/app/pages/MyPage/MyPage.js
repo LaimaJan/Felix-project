@@ -12,11 +12,20 @@ import Hero from '../../components/Hero';
 import Button from '../../components/Button';
 import MovieCard from '../../components/MovieCard';
 
-function MyPage({ favorites, onHandleClick, token, logOut }) {
+function MyPage({
+	favorites,
+	onHandleClick,
+	token,
+	logOut,
+	pageLoading,
+	pageLoadingError,
+	loadingState,
+	errorState,
+}) {
 	const navigate = useNavigate();
 	const [allFilms, setAllFilms] = useState([]);
-	const [loading, setLoading] = useState(false);
-	const [error, setError] = useState(false);
+	// const [loading, setLoading] = useState(false);
+	// const [error, setError] = useState(false);
 	const tokenNumber = token;
 
 	const singleMovieClicked = (id) => {
@@ -24,7 +33,7 @@ function MyPage({ favorites, onHandleClick, token, logOut }) {
 	};
 
 	const fetchData = useCallback(async () => {
-		setLoading(false);
+		pageLoading(false);
 
 		try {
 			const result = await fetch(API.paidMovies, {
@@ -35,18 +44,18 @@ function MyPage({ favorites, onHandleClick, token, logOut }) {
 			});
 
 			if (result.status >= 400 && result.status <= 599) {
-				setError(true);
+				pageLoadingError(true);
 			} else {
 				let response = await result.json();
 
 				setAllFilms(response);
 			}
 		} catch (error) {
-			setError(true);
+			pageLoadingError(true);
 		} finally {
-			setLoading(false);
+			pageLoading(false);
 		}
-	}, [tokenNumber]);
+	}, [tokenNumber, pageLoading, pageLoadingError]);
 
 	useEffect(() => {
 		fetchData();
@@ -64,8 +73,8 @@ function MyPage({ favorites, onHandleClick, token, logOut }) {
 
 			<main>
 				<div className="main-content">
-					{loading && <img src={logo} className="App-logo" alt="logo" />}
-					{error && <p>Whoops! Failed to Load! 🙊</p>}
+					{loadingState && <img src={logo} className="App-logo" alt="logo" />}
+					{errorState && <p>Whoops! Failed to Load! 🙊</p>}
 
 					{allFilms.map(({ title, id, image, description }) => (
 						<MovieCard
@@ -95,6 +104,8 @@ function mapStateToProps(state) {
 	return {
 		favorites: state.content.favorites || [],
 		token: state.token.token || [],
+		loadingState: state.loading.loading,
+		errorState: state.loading.error,
 	};
 }
 
@@ -111,6 +122,12 @@ function mapDispatchToProps(dispatch) {
 			if (token) {
 				dispatch({ type: 'DELETE_TOKEN', token });
 			}
+		},
+		pageLoading: (loading) => {
+			dispatch({ type: 'LOADING_MESSAGE', loading });
+		},
+		pageLoadingError: (error) => {
+			dispatch({ type: 'ERROR_MESSAGE', error });
 		},
 	};
 }
