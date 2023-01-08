@@ -22,6 +22,7 @@ function tokenReducer(state = TOKEN_STATE, action) {
 			return { ...state, token: action.token };
 
 		case 'DELETE_TOKEN':
+			console.log('DELETE TOKENAS REDUCER');
 			window.localStorage.removeItem(TOKEN_STORAGE);
 
 			return { ...state, token: action.token };

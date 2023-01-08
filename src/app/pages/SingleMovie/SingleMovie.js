@@ -45,8 +45,8 @@ function SingleMovie({
 
 	const fetchData = useCallback(
 		async (id) => {
-			pageLoading(false);
-			console.log(token);
+			pageLoading(true);
+			console.log('token in singleMovie.js: ' + token);
 
 			try {
 				const tokenNumber = token;
@@ -60,17 +60,17 @@ function SingleMovie({
 					pageLoadingError(true);
 				} else {
 					let response = await result.json();
-					// console.log(response);
+					console.log('response fetch in singleMovie.js: ' + response);
 					setSingleMovie(response);
 				}
 			} catch (error) {
 				pageLoadingError(true);
-				pageLoading(false);
+				// pageLoading(false);
 			} finally {
 				pageLoading(false);
 			}
 		},
-		[pageLoading, pageLoadingError]
+		[pageLoading, pageLoadingError, token]
 	);
 
 	useEffect(() => {
@@ -135,14 +135,10 @@ function mapDispatchToProps(dispatch) {
 			}
 		},
 		pageLoading: (loading) => {
-			if (loading) {
-				dispatch({ type: 'LOADING_MESSAGE', loading });
-			}
+			dispatch({ type: 'LOADING_MESSAGE', loading });
 		},
 		pageLoadingError: (error) => {
-			if (error) {
-				dispatch({ type: 'ERROR_MESSAGE', error });
-			}
+			dispatch({ type: 'ERROR_MESSAGE', error });
 		},
 		logOut: (token) => {
 			if (token) {

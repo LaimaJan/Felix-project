@@ -44,6 +44,7 @@ function MyPage({ favorites, onHandleClick, token, logOut }) {
 				setError(true);
 			} else {
 				let response = await result.json();
+				console.log('response fetch in MYPAGE.js: ' + response);
 
 				setAllFilms(response);
 			}
@@ -62,7 +63,7 @@ function MyPage({ favorites, onHandleClick, token, logOut }) {
 		<div className="App">
 			<Header className="header">
 				<Link to="/">
-					<Button onClick={logOut(token)}>Logout</Button>
+					<Button onClick={() => logOut(token)}>Logout</Button>
 				</Link>
 			</Header>
 
@@ -115,6 +116,7 @@ function mapDispatchToProps(dispatch) {
 		},
 		logOut: (token) => {
 			if (token) {
+				console.log('DElete MyPage.js');
 				dispatch({ type: 'DELETE_TOKEN', token });
 			}
 		},
