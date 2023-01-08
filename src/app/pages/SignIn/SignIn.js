@@ -5,17 +5,11 @@ import Button from '../../components/Button';
 import Footer from '../../components/Footer';
 import { FaEye } from 'react-icons/fa';
 
-// import { API } from '../../../constants';
 import { connect } from 'react-redux';
 
 import './SignIn.css';
 
-function SignInUseState({
-	updateToken,
-	pageLoading,
-	loadingState,
-	// pageLoadingError,
-}) {
+function SignInUseState({ updateToken, pageLoading, loadingState }) {
 	const navigate = useNavigate();
 	const [username, setUsername] = useState('');
 	const redirectLink = useLocation().state || '/myPage';
@@ -23,7 +17,6 @@ function SignInUseState({
 	const [failureMessage, setFailureMessage] = useState(false);
 	const [hidePassword, setHidePassword] = useState(true);
 	const [errorType, setErrorType] = useState();
-	// const [loading, setLoading] = useState(false);
 	const errorMessage = {
 		request: 'Oops! Something went wrong!',
 	}[errorType];
@@ -141,11 +134,6 @@ function mapDispatchToProps(dispatch) {
 		pageLoading: (loading) => {
 			if (loading) {
 				dispatch({ type: 'LOADING_MESSAGE', loading });
-			}
-		},
-		pageLoadingError: (error) => {
-			if (error) {
-				dispatch({ type: 'ERROR_MESSAGE', error });
 			}
 		},
 	};

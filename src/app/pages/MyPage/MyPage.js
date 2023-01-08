@@ -20,14 +20,8 @@ function MyPage({ favorites, onHandleClick, token, logOut }) {
 	const tokenNumber = token;
 
 	const singleMovieClicked = (id) => {
-		console.log('Pries function: ' + id);
-
 		navigate(`/singleMovie/${id}`);
 	};
-
-	// const logOut = () => {
-	// 	localStorage.removeItem('token');
-	// };
 
 	const fetchData = useCallback(async () => {
 		setLoading(false);
@@ -44,7 +38,6 @@ function MyPage({ favorites, onHandleClick, token, logOut }) {
 				setError(true);
 			} else {
 				let response = await result.json();
-				console.log('response fetch in MYPAGE.js: ' + response);
 
 				setAllFilms(response);
 			}
@@ -116,7 +109,6 @@ function mapDispatchToProps(dispatch) {
 		},
 		logOut: (token) => {
 			if (token) {
-				console.log('DElete MyPage.js');
 				dispatch({ type: 'DELETE_TOKEN', token });
 			}
 		},

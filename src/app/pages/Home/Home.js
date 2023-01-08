@@ -20,8 +20,6 @@ function Home({
 	errorState,
 }) {
 	const [freeFilms, setFreeFilms] = useState([]);
-	// const [loading, setLoading] = useState(false);
-	// const [error, setError] = useState(false);
 
 	const fetchData = useCallback(async () => {
 		pageLoading(false);
@@ -90,7 +88,9 @@ function Home({
 }
 
 function mapStateToProps(state) {
-	console.log(state.content.favorites);
+	console.log(
+		'Home.js mapStateToProps - favorites from state: ' + state.content.favorites
+	);
 	return {
 		favorites: state.content.favorites || [],
 		loadingState: state.loading.loading,
