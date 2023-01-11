@@ -28,7 +28,6 @@ function App() {
 					<Route element={<PrivateRoute />}>
 						<Route path="/singleMovie/:id" element={<SingleMovie />} />
 					</Route>
-					{/* <Route path="/singleMovie/:id" element={<SingleMovie />} /> */}
 					<Route path="/createUser" element={<CreateUser />} />
 					<Route path="/createUser/pickPlan" element={<PickPlan />} />
 					<Route path="/createUser/pickPlan/payment" element={<Payment />} />

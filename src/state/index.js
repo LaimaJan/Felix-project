@@ -1,7 +1,7 @@
 import { legacy_createStore as createStore, combineReducers } from 'redux';
-import pageLoadReducer from '../content/pageLoadReducer';
+import pageLoadReducer from '../pageLoading/reducer';
 import contentReducer from '../content/reducer';
-import tokenReducer from '../content/tokenReducer';
+import tokenReducer from '../auth/reducer';
 
 const rootReducer = combineReducers({
 	content: contentReducer,

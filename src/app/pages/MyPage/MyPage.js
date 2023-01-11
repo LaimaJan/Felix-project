@@ -1,7 +1,7 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-import { API } from '../../../constants';
+import { API } from '../../constants';
 import { connect } from 'react-redux';
 
 import './MyPage.css';
@@ -14,18 +14,17 @@ import MovieCard from '../../components/MovieCard';
 
 function MyPage({
 	favorites,
-	onHandleClick,
 	token,
-	logOut,
-	pageLoading,
-	pageLoadingError,
+	onHandleClick,
 	loadingState,
 	errorState,
+	logOut,
+	movies,
+	onLoading,
+	onSuccess,
+	onFailure,
 }) {
 	const navigate = useNavigate();
-	const [allFilms, setAllFilms] = useState([]);
-	// const [loading, setLoading] = useState(false);
-	// const [error, setError] = useState(false);
 	const tokenNumber = token;
 
 	const singleMovieClicked = (id) => {
@@ -33,7 +32,7 @@ function MyPage({
 	};
 
 	const fetchData = useCallback(async () => {
-		pageLoading(false);
+		onLoading();
 
 		try {
 			const result = await fetch(API.paidMovies, {
@@ -44,18 +43,16 @@ function MyPage({
 			});
 
 			if (result.status >= 400 && result.status <= 599) {
-				pageLoadingError(true);
+				throw new Error('failed to load');
 			} else {
 				let response = await result.json();
 
-				setAllFilms(response);
+				onSuccess(response);
 			}
 		} catch (error) {
-			pageLoadingError(true);
-		} finally {
-			pageLoading(false);
+			onFailure();
 		}
-	}, [tokenNumber, pageLoading, pageLoadingError]);
+	}, [onLoading, onSuccess, onFailure, tokenNumber]);
 
 	useEffect(() => {
 		fetchData();
@@ -76,7 +73,7 @@ function MyPage({
 					{loadingState && <img src={logo} className="App-logo" alt="logo" />}
 					{errorState && <p>Whoops! Failed to Load! 🙊</p>}
 
-					{allFilms.map(({ title, id, image, description }) => (
+					{movies.map(({ title, id, image, description }) => (
 						<MovieCard
 							id={id}
 							key={id}
@@ -104,8 +101,9 @@ function mapStateToProps(state) {
 	return {
 		favorites: state.content.favorites || [],
 		token: state.token.token || [],
-		loadingState: state.loading.loading,
-		errorState: state.loading.error,
+		loadingState: state.content.loading,
+		errorState: state.content.error,
+		movies: state.content.movies,
 	};
 }
 
@@ -123,11 +121,14 @@ function mapDispatchToProps(dispatch) {
 				dispatch({ type: 'DELETE_TOKEN', token });
 			}
 		},
-		pageLoading: (loading) => {
-			dispatch({ type: 'LOADING_MESSAGE', loading });
+		onLoading: () => {
+			dispatch({ type: 'GET_MOVIES' });
 		},
-		pageLoadingError: (error) => {
-			dispatch({ type: 'ERROR_MESSAGE', error });
+		onSuccess: (payload) => {
+			dispatch({ type: 'GET_MOVIES_SUCCES', payload });
+		},
+		onFailure: () => {
+			dispatch({ type: 'GET_MOVIES_FAILURE' });
 		},
 	};
 }

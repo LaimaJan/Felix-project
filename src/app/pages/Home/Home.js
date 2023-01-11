@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { API } from '../../../constants';
+import { API } from '../../constants';
 import { connect } from 'react-redux';
 
 import './App.css';
@@ -14,15 +14,15 @@ import MovieCard from '../../components/MovieCard';
 function Home({
 	favorites,
 	onHandleClick,
-	pageLoading,
-	pageLoadingError,
+	onLoading,
+	onSuccess,
+	onFailure,
+	movies,
 	loadingState,
 	errorState,
 }) {
-	const [freeFilms, setFreeFilms] = useState([]);
-
 	const fetchData = useCallback(async () => {
-		pageLoading(false);
+		onLoading();
 
 		try {
 			const result = await fetch(API.freeMovies);
@@ -31,14 +31,14 @@ function Home({
 				throw new Error('failed to load');
 			} else {
 				const json = await result.json();
-				setFreeFilms(json);
+				onSuccess(json);
 			}
 		} catch (error) {
-			pageLoadingError(true);
+			onFailure();
 		} finally {
-			pageLoading(false);
+			onFailure(false);
 		}
-	}, [pageLoading, pageLoadingError]);
+	}, [onLoading, onSuccess, onFailure]);
 
 	useEffect(() => {
 		fetchData();
@@ -63,7 +63,7 @@ function Home({
 					{loadingState && <img src={logo} className="App-logo" alt="logo" />}
 					{errorState && <p>Whoops! Failed to Load!</p>}
 
-					{freeFilms.map(({ title, id, image, description }) => (
+					{movies.map(({ title, id, image, description }) => (
 						<MovieCard
 							id={id}
 							key={id}
@@ -90,8 +90,9 @@ function Home({
 function mapStateToProps(state) {
 	return {
 		favorites: state.content.favorites || [],
-		loadingState: state.loading.loading,
-		errorState: state.loading.error,
+		loading: state.content.loading,
+		error: state.content.error,
+		movies: state.content.movies,
 	};
 }
 
@@ -104,11 +105,14 @@ function mapDispatchToProps(dispatch) {
 				dispatch({ type: 'ADD_FAVORITE', id });
 			}
 		},
-		pageLoading: (loading) => {
-			dispatch({ type: 'LOADING_MESSAGE', loading });
+		onLoading: () => {
+			dispatch({ type: 'GET_MOVIES' });
 		},
-		pageLoadingError: (error) => {
-			dispatch({ type: 'ERROR_MESSAGE', error });
+		onSuccess: (payload) => {
+			dispatch({ type: 'GET_MOVIES_SUCCES', payload });
+		},
+		onFailure: () => {
+			dispatch({ type: 'GET_MOVIES_FAILURE' });
 		},
 	};
 }

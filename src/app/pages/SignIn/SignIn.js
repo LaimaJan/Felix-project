@@ -9,17 +9,19 @@ import { connect } from 'react-redux';
 
 import './SignIn.css';
 
-function SignInUseState({ updateToken, pageLoading, loadingState }) {
+function SignInUseState({
+	loginSuccess,
+	loadingState,
+	loginFailure,
+	errorMessage,
+	loginFetch,
+}) {
 	const navigate = useNavigate();
 	const [username, setUsername] = useState('');
 	const redirectLink = useLocation().state || '/myPage';
 	const [password, setPassword] = useState('');
 	const [failureMessage, setFailureMessage] = useState(false);
 	const [hidePassword, setHidePassword] = useState(true);
-	const [errorType, setErrorType] = useState();
-	const errorMessage = {
-		request: 'Oops! Something went wrong!',
-	}[errorType];
 
 	const managePasswordVisibility = () => {
 		setHidePassword(!hidePassword);
@@ -31,7 +33,7 @@ function SignInUseState({ updateToken, pageLoading, loadingState }) {
 		if (username === '' || password === '') {
 			toggleFailMessageClass();
 		} else {
-			pageLoading(true);
+			loginFetch();
 			try {
 				const response = await fetch(
 					'https://dummy-video-api.onrender.com/auth/login',
@@ -45,19 +47,17 @@ function SignInUseState({ updateToken, pageLoading, loadingState }) {
 				);
 
 				if (response.status > 399 && response.status < 600) {
-					setErrorType(
+					loginFailure(
 						response.status === 400 ? toggleFailMessageClass() : 'request'
 					);
 				} else {
 					const { token } = await response.json();
 
-					updateToken(token);
+					loginSuccess(token);
 					navigate(redirectLink);
 				}
 			} catch (error) {
-				setErrorType('request');
-			} finally {
-				pageLoading(false);
+				loginFailure('request');
 			}
 		}
 	};
@@ -119,22 +119,21 @@ function SignInUseState({ updateToken, pageLoading, loadingState }) {
 function mapStateToProps(state) {
 	return {
 		token: state.token.token || [],
-		loadingState: state.loading.loading,
-		errorState: state.loading.error,
+		loadingState: state.token.loading,
+		errorMessage: state.token.error,
 	};
 }
 
 function mapDispatchToProps(dispatch) {
 	return {
-		updateToken: (token) => {
-			if (token) {
-				dispatch({ type: 'UPDATE_TOKEN', token });
-			}
+		loginFetch: () => {
+			dispatch({ type: 'LOGIN' });
 		},
-		pageLoading: (loading) => {
-			if (loading) {
-				dispatch({ type: 'LOADING_MESSAGE', loading });
-			}
+		loginSuccess: (token) => {
+			dispatch({ type: 'LOGIN_SUCCESS', token });
+		},
+		loginFailure: (payload) => {
+			dispatch({ type: 'LOGIN_FAILURE', payload });
 		},
 	};
 }

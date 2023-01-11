@@ -6,31 +6,25 @@ import Button from '../../components/Button';
 import Footer from '../../components/Footer';
 import SingleMovieCard from '../../components/SingleMovieCard/SingleMovieCard';
 
-import { API } from '../../../constants';
+import { API } from '../../constants';
 import { connect } from 'react-redux';
 
 import './SingleMovie.css';
 
 function SingleMovie({
+	movies,
 	favorites,
 	onHandleClick,
-	pageLoading,
-	pageLoadingError,
 	loadingState,
 	errorState,
 	token,
 	logOut,
+	onLoading,
+	onSuccess,
+	onFailure,
 }) {
-	// const navigate = useNavigate();
-	// const [loading, setLoading] = useState(false);
-	// const [error, setError] = useState(false);
 	const [openModal, setOpenModal] = useState(false);
-	const [singleMovie, setSingleMovie] = useState([]);
-
-	// const logOut = () => {
-	// 	localStorage.removeItem('token');
-	// 	navigate(`/`);
-	// };
+	// const [singleMovie, setSingleMovie] = useState([]);
 
 	const watchTrailer = () => {
 		const currentState = openModal;
@@ -43,13 +37,16 @@ function SingleMovie({
 	};
 
 	const { id } = useParams();
+	console.log(id);
+	console.log(movies);
 
 	const fetchData = useCallback(
 		async (id) => {
-			pageLoading(true);
+			onLoading();
 
 			try {
 				const tokenNumber = token;
+				console.log(token);
 				const result = await fetch(`${API.paidMovies}/${id}`, {
 					method: 'GET',
 					headers: {
@@ -57,23 +54,23 @@ function SingleMovie({
 					},
 				});
 				if (result.status >= 400 && result.status <= 599) {
-					pageLoadingError(true);
+					throw new Error('failed to load');
 				} else {
 					let response = await result.json();
-					setSingleMovie(response);
+
+					console.log(response);
+					onSuccess(response);
 				}
 			} catch (error) {
-				pageLoadingError(true);
-				// pageLoading(false);
-			} finally {
-				pageLoading(false);
+				onFailure();
 			}
 		},
-		[pageLoading, pageLoadingError, token]
+		[onLoading, onSuccess, onFailure, token]
 	);
 
 	useEffect(() => {
-		// console.log(id);
+		console.log('CONSOLE LOGAS');
+
 		fetchData(id);
 	}, [id, fetchData]);
 
@@ -89,13 +86,13 @@ function SingleMovie({
 					{loadingState && <img src={logo} className="App-logo" alt="logo" />}
 					{errorState && <p>Whoops! Failed to Load! 🙊</p>}
 					<SingleMovieCard
-						id={singleMovie.id}
-						key={singleMovie.id}
-						title={singleMovie.title}
-						description={singleMovie.description}
-						image={singleMovie.image}
+						id={movies[0].id}
+						key={movies[0].id}
+						title={movies[0].title}
+						description={movies[0].description}
+						image={movies[0].image}
 						onHandleClick={() => onHandleClick(id, favorites.includes(id))}
-						isFavorite={favorites.includes(singleMovie.id)}
+						isFavorite={favorites.includes(movies[0].id)}
 						clickWatchTrailer={watchTrailer}
 					/>
 				</main>
@@ -107,7 +104,7 @@ function SingleMovie({
 			>
 				<iframe
 					title="movieTrailer"
-					src={singleMovie.video}
+					src={movies[0].video}
 					frameBorder="0"
 					allowFullScreen
 				/>
@@ -119,8 +116,9 @@ function SingleMovie({
 function mapStateToProps(state) {
 	return {
 		favorites: state.content.favorites || [],
-		loadingState: state.loading.loading,
-		errorState: state.loading.error,
+		movies: state.content.movies,
+		loadingState: state.content.loading,
+		errorState: state.content.error,
 		token: state.token.token || [],
 	};
 }
@@ -134,11 +132,14 @@ function mapDispatchToProps(dispatch) {
 				dispatch({ type: 'ADD_FAVORITE', id });
 			}
 		},
-		pageLoading: (loading) => {
-			dispatch({ type: 'LOADING_MESSAGE', loading });
+		onLoading: () => {
+			dispatch({ type: 'GET_MOVIES' });
 		},
-		pageLoadingError: (error) => {
-			dispatch({ type: 'ERROR_MESSAGE', error });
+		onSuccess: (payload) => {
+			dispatch({ type: 'GET_MOVIES_SUCCES', payload });
+		},
+		onFailure: () => {
+			dispatch({ type: 'GET_MOVIES_FAILURE' });
 		},
 		logOut: (token) => {
 			if (token) {
