@@ -2,6 +2,7 @@ import React, { useCallback, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { API } from '../../constants';
 import { connect } from 'react-redux';
+// import * as CONTENT_TYPES from '../../../content/types';
 
 import './App.css';
 import logo from '../../images/logo.svg';
@@ -10,6 +11,7 @@ import Footer from '../../components/Footer';
 import Hero from '../../components/Hero';
 import Button from '../../components/Button';
 import MovieCard from '../../components/MovieCard';
+import content from '../../../content';
 
 function Home({
 	favorites,
@@ -89,10 +91,10 @@ function Home({
 
 function mapStateToProps(state) {
 	return {
-		favorites: state.content.favorites || [],
-		loading: state.content.loading,
-		error: state.content.error,
-		movies: state.content.movies,
+		favorites: content.selectors.getFavorites(state),
+		loading: content.selectors.getMoviesLoading(state),
+		error: content.selectors.getMoviesError(state),
+		movies: content.selectors.getMovies(state),
 	};
 }
 
@@ -100,19 +102,19 @@ function mapDispatchToProps(dispatch) {
 	return {
 		onHandleClick: (id, isFavorite) => {
 			if (isFavorite) {
-				dispatch({ type: 'REMOVE_FAVORITE', id });
+				dispatch({ type: content.types.REMOVE_FAVORITE, id });
 			} else {
-				dispatch({ type: 'ADD_FAVORITE', id });
+				dispatch({ type: content.types.ADD_FAVORITE, id });
 			}
 		},
 		onLoading: () => {
-			dispatch({ type: 'GET_MOVIES' });
+			dispatch({ type: content.types.GET_MOVIES });
 		},
 		onSuccess: (payload) => {
-			dispatch({ type: 'GET_MOVIES_SUCCES', payload });
+			dispatch({ type: content.types.GET_MOVIES_SUCCESS, payload });
 		},
 		onFailure: () => {
-			dispatch({ type: 'GET_MOVIES_FAILURE' });
+			dispatch({ type: content.types.GET_MOVIES_FAILURE });
 		},
 	};
 }

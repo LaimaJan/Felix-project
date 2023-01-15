@@ -1,6 +1,9 @@
 import { Navigate, Outlet, useHref } from 'react-router-dom';
 import { connect } from 'react-redux';
 
+// import { getToken } from '../../../auth/selectors';
+import auth from '../../../auth';
+
 function PrivateRoute({ token }) {
 	const href = useHref();
 
@@ -13,7 +16,7 @@ function PrivateRoute({ token }) {
 
 function mapStateToProps(state) {
 	return {
-		token: state.token.token || [],
+		token: auth.selectors.getToken(state),
 	};
 }
 

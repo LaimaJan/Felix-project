@@ -1,4 +1,5 @@
 import { FAVORITES_STORAGE } from '../app/constants';
+import * as TYPES from './types';
 
 const FIRST_STATE = {
 	favorites: JSON.parse(window.localStorage.getItem(FAVORITES_STORAGE)) || [],
@@ -9,7 +10,7 @@ const FIRST_STATE = {
 
 function reducer(state = FIRST_STATE, action) {
 	switch (action.type) {
-		case 'ADD_FAVORITE':
+		case TYPES.ADD_FAVORITE:
 			const newFavoriteMovies = state.favorites.concat(action.id);
 
 			window.localStorage.setItem(
@@ -18,7 +19,7 @@ function reducer(state = FIRST_STATE, action) {
 			);
 			return { ...state, favorites: state.favorites.concat(action.id) };
 
-		case 'REMOVE_FAVORITE': {
+		case TYPES.REMOVE_FAVORITE: {
 			const newFavoriteMovies = state.favorites.filter(
 				(movieId) => movieId !== action.id
 			);
@@ -29,10 +30,10 @@ function reducer(state = FIRST_STATE, action) {
 			);
 			return { ...state, favorites: newFavoriteMovies };
 		}
-		case 'GET_MOVIES': {
+		case TYPES.GET_MOVIES: {
 			return { ...state, loading: true };
 		}
-		case 'GET_MOVIES_SUCCES': {
+		case TYPES.GET_MOVIES_SUCCESS: {
 			console.log('PAYOLOAD: ' + action.payload);
 			return {
 				...state,
@@ -43,7 +44,7 @@ function reducer(state = FIRST_STATE, action) {
 				error: false,
 			};
 		}
-		case 'GET_MOVIES_FAILURE': {
+		case TYPES.GET_MOVIES_FAILURE: {
 			return { ...state, error: true, loading: false };
 		}
 		default:

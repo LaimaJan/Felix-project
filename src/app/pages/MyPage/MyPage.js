@@ -12,6 +12,9 @@ import Hero from '../../components/Hero';
 import Button from '../../components/Button';
 import MovieCard from '../../components/MovieCard';
 
+import auth from '../../../auth';
+import content from '../../../content';
+
 function MyPage({
 	favorites,
 	token,
@@ -99,11 +102,11 @@ function MyPage({
 
 function mapStateToProps(state) {
 	return {
-		favorites: state.content.favorites || [],
-		token: state.token.token || [],
-		loadingState: state.content.loading,
-		errorState: state.content.error,
-		movies: state.content.movies,
+		favorites: content.selectors.getFavorites(state),
+		token: auth.selectors.getToken(state),
+		loadingState: content.selectors.getMoviesLoading(state),
+		errorState: content.selectors.getMoviesError(state),
+		movies: content.selectors.getMovies(state),
 	};
 }
 
@@ -111,24 +114,24 @@ function mapDispatchToProps(dispatch) {
 	return {
 		onHandleClick: (id, isFavorite) => {
 			if (isFavorite) {
-				dispatch({ type: 'REMOVE_FAVORITE', id });
+				dispatch({ type: connect.types.REMOVE_FAVORITE, id });
 			} else {
-				dispatch({ type: 'ADD_FAVORITE', id });
+				dispatch({ type: connect.types.ADD_FAVORITE, id });
 			}
 		},
 		logOut: (token) => {
 			if (token) {
-				dispatch({ type: 'DELETE_TOKEN', token });
+				dispatch({ type: auth.types.DELETE_TOKEN, token });
 			}
 		},
 		onLoading: () => {
-			dispatch({ type: 'GET_MOVIES' });
+			dispatch({ type: connect.types.GET_MOVIES });
 		},
 		onSuccess: (payload) => {
-			dispatch({ type: 'GET_MOVIES_SUCCES', payload });
+			dispatch({ type: connect.types.GET_MOVIES_SUCCESS, payload });
 		},
 		onFailure: () => {
-			dispatch({ type: 'GET_MOVIES_FAILURE' });
+			dispatch({ type: connect.types.GET_MOVIES_FAILURE });
 		},
 	};
 }

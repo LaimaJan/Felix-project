@@ -1,0 +1,4 @@
+export const LOGIN = 'AUTH.LOGIN';
+export const LOGIN_SUCCESS = 'AUTH.LOGIN_SUCCESS';
+export const DELETE_TOKEN = 'AUTH.DELETE_TOKEN';
+export const LOGIN_FAILURE = 'LOGIN_FAILURE';

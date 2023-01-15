@@ -11,6 +11,12 @@ import { connect } from 'react-redux';
 
 import './SingleMovie.css';
 
+// import * as AUTH_TYPES from '../../../auth/types';
+// import * as CONTENT_TYPES from '../../../content/types';
+
+import auth from '../../../auth';
+import content from '../../../content';
+
 function SingleMovie({
 	movies,
 	favorites,
@@ -24,7 +30,6 @@ function SingleMovie({
 	onFailure,
 }) {
 	const [openModal, setOpenModal] = useState(false);
-	// const [singleMovie, setSingleMovie] = useState([]);
 
 	const watchTrailer = () => {
 		const currentState = openModal;
@@ -85,16 +90,18 @@ function SingleMovie({
 				<main>
 					{loadingState && <img src={logo} className="App-logo" alt="logo" />}
 					{errorState && <p>Whoops! Failed to Load! 🙊</p>}
-					<SingleMovieCard
-						id={movies[0].id}
-						key={movies[0].id}
-						title={movies[0].title}
-						description={movies[0].description}
-						image={movies[0].image}
-						onHandleClick={() => onHandleClick(id, favorites.includes(id))}
-						isFavorite={favorites.includes(movies[0].id)}
-						clickWatchTrailer={watchTrailer}
-					/>
+					{movies[0] && (
+						<SingleMovieCard
+							id={movies[0].id}
+							key={movies[0].id}
+							title={movies[0].title}
+							description={movies[0].description}
+							image={movies[0].image}
+							onHandleClick={() => onHandleClick(id, favorites.includes(id))}
+							isFavorite={favorites.includes(movies[0].id)}
+							clickWatchTrailer={watchTrailer}
+						/>
+					)}
 				</main>
 				<Footer />
 			</div>
@@ -102,12 +109,14 @@ function SingleMovie({
 				className={openModal ? 'show-video-modal' : 'disable-video-modal'}
 				onClick={exitTrailer}
 			>
-				<iframe
-					title="movieTrailer"
-					src={movies[0].video}
-					frameBorder="0"
-					allowFullScreen
-				/>
+				{movies[0] && (
+					<iframe
+						title="movieTrailer"
+						src={movies[0].video}
+						frameBorder="0"
+						allowFullScreen
+					/>
+				)}
 			</div>
 		</div>
 	);
@@ -115,11 +124,11 @@ function SingleMovie({
 
 function mapStateToProps(state) {
 	return {
-		favorites: state.content.favorites || [],
-		movies: state.content.movies,
-		loadingState: state.content.loading,
-		errorState: state.content.error,
-		token: state.token.token || [],
+		favorites: content.selectors.getFavorites(state),
+		movies: content.selectors.getMovies(state),
+		loadingState: content.selectors.getMoviesLoading(state),
+		errorState: content.selectors.getMoviesError(state),
+		token: auth.selectors.getToken(state),
 	};
 }
 
@@ -127,23 +136,23 @@ function mapDispatchToProps(dispatch) {
 	return {
 		onHandleClick: (id, isFavorite) => {
 			if (isFavorite) {
-				dispatch({ type: 'REMOVE_FAVORITE', id });
+				dispatch({ type: content.types.REMOVE_FAVORITE, id });
 			} else {
-				dispatch({ type: 'ADD_FAVORITE', id });
+				dispatch({ type: content.types.ADD_FAVORITE, id });
 			}
 		},
 		onLoading: () => {
-			dispatch({ type: 'GET_MOVIES' });
+			dispatch({ type: content.types.GET_MOVIES });
 		},
 		onSuccess: (payload) => {
-			dispatch({ type: 'GET_MOVIES_SUCCES', payload });
+			dispatch({ type: content.types.GET_MOVIES_SUCCESS, payload });
 		},
 		onFailure: () => {
-			dispatch({ type: 'GET_MOVIES_FAILURE' });
+			dispatch({ type: content.types.GET_MOVIES_FAILURE });
 		},
 		logOut: (token) => {
 			if (token) {
-				dispatch({ type: 'DELETE_TOKEN', token });
+				dispatch({ type: auth.types.DELETE_TOKEN, token });
 			}
 		},
 	};

@@ -8,6 +8,9 @@ import { FaEye } from 'react-icons/fa';
 import { connect } from 'react-redux';
 
 import './SignIn.css';
+// import * as AUTH_TYPES from '../../../auth/types';
+// import { getToken } from '../../../auth/selectors';
+import auth from '../../../auth';
 
 function SignInUseState({
 	loginSuccess,
@@ -118,22 +121,22 @@ function SignInUseState({
 
 function mapStateToProps(state) {
 	return {
-		token: state.token.token || [],
-		loadingState: state.token.loading,
-		errorMessage: state.token.error,
+		token: auth.selectors.getToken(state),
+		loadingState: auth.selectors.getLoading(state),
+		errorMessage: auth.selectors.getError(state),
 	};
 }
 
 function mapDispatchToProps(dispatch) {
 	return {
 		loginFetch: () => {
-			dispatch({ type: 'LOGIN' });
+			dispatch({ type: auth.types.LOGIN });
 		},
 		loginSuccess: (token) => {
-			dispatch({ type: 'LOGIN_SUCCESS', token });
+			dispatch({ type: auth.types.LOGIN_SUCCESS, token });
 		},
 		loginFailure: (payload) => {
-			dispatch({ type: 'LOGIN_FAILURE', payload });
+			dispatch({ type: auth.types.LOGIN_FAILURE, payload });
 		},
 	};
 }

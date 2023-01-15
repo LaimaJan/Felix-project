@@ -1,4 +1,5 @@
 import { TOKEN_STORAGE } from '../app/constants';
+import * as TYPES from './types';
 
 const TOKEN_STATE = {
 	token: window.localStorage.getItem(TOKEN_STORAGE) || '',
@@ -8,20 +9,20 @@ const TOKEN_STATE = {
 
 function tokenReducer(state = TOKEN_STATE, action) {
 	switch (action.type) {
-		case 'LOGIN':
+		case TYPES.LOGIN:
 			return { ...state, loading: true, error: null };
-		case 'LOGIN_SUCCESS':
+		case TYPES.LOGIN_SUCCESS:
 			window.localStorage.removeItem(TOKEN_STORAGE);
 			window.localStorage.setItem(TOKEN_STORAGE, action.token);
 
 			return { ...state, loading: false, token: action.token };
 
-		case 'DELETE_TOKEN':
+		case TYPES.DELETE_TOKEN:
 			window.localStorage.removeItem(TOKEN_STORAGE);
 
 			return { ...TOKEN_STATE, token: null };
 
-		case 'LOGIN_FAILURE': {
+		case TYPES.LOGIN_FAILURE: {
 			const errorMessage =
 				{ request: 'Oops! Something went wrong!' }[action.payload] || null;
 
