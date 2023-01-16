@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import logo from '../../images/logo.svg';
 import { useParams, Link } from 'react-router-dom';
 import Header from '../../components/Header';
@@ -6,8 +6,9 @@ import Button from '../../components/Button';
 import Footer from '../../components/Footer';
 import SingleMovieCard from '../../components/SingleMovieCard/SingleMovieCard';
 
-import { API } from '../../constants';
+// import { API } from '../../constants';
 import { connect } from 'react-redux';
+import { compose, bindActionCreators } from 'redux';
 
 import './SingleMovie.css';
 
@@ -25,6 +26,7 @@ function SingleMovie({
 	errorState,
 	token,
 	logOut,
+	getMovies,
 	onLoading,
 	onSuccess,
 	onFailure,
@@ -45,39 +47,43 @@ function SingleMovie({
 	console.log(id);
 	console.log(movies);
 
-	const fetchData = useCallback(
-		async (id) => {
-			onLoading();
+	// const fetchData = useCallback(
+	// 	async (id) => {
+	// 		onLoading();
 
-			try {
-				const tokenNumber = token;
-				console.log(token);
-				const result = await fetch(`${API.paidMovies}/${id}`, {
-					method: 'GET',
-					headers: {
-						Authorization: tokenNumber,
-					},
-				});
-				if (result.status >= 400 && result.status <= 599) {
-					throw new Error('failed to load');
-				} else {
-					let response = await result.json();
+	// 		try {
+	// 			const tokenNumber = token;
+	// 			console.log(token);
+	// 			const result = await fetch(`${API.paidMovies}/${id}`, {
+	// 				method: 'GET',
+	// 				headers: {
+	// 					Authorization: tokenNumber,
+	// 				},
+	// 			});
+	// 			if (result.status >= 400 && result.status <= 599) {
+	// 				throw new Error('failed to load');
+	// 			} else {
+	// 				let response = await result.json();
 
-					console.log(response);
-					onSuccess(response);
-				}
-			} catch (error) {
-				onFailure();
-			}
-		},
-		[onLoading, onSuccess, onFailure, token]
-	);
+	// 				console.log(response);
+	// 				onSuccess(response);
+	// 			}
+	// 		} catch (error) {
+	// 			onFailure();
+	// 		}
+	// 	},
+	// 	[onLoading, onSuccess, onFailure, token]
+	// );
+
+	// useEffect(() => {
+	// 	console.log('CONSOLE LOGAS');
+
+	// 	fetchData(id);
+	// }, [id, fetchData]);
 
 	useEffect(() => {
-		console.log('CONSOLE LOGAS');
-
-		fetchData(id);
-	}, [id, fetchData]);
+		getMovies('single', id);
+	}, [getMovies, id]);
 
 	return (
 		<div className="content-wrapper">
@@ -122,40 +128,31 @@ function SingleMovie({
 	);
 }
 
-function mapStateToProps(state) {
-	return {
-		favorites: content.selectors.getFavorites(state),
-		movies: content.selectors.getMovies(state),
-		loadingState: content.selectors.getMoviesLoading(state),
-		errorState: content.selectors.getMoviesError(state),
-		token: auth.selectors.getToken(state),
-	};
-}
+const enhance = compose(
+	connect(
+		(state) => ({
+			favorites: content.selectors.getFavorites(state),
+			movies: content.selectors.getMovies(state),
+			loadingState: content.selectors.getMoviesLoading(state),
+			errorState: content.selectors.getMoviesError(state),
+			token: auth.selectors.getToken(state),
+		}),
+		(dispatch) =>
+			bindActionCreators(
+				{
+					onHandleClick: content.actions.onHandleClick,
 
-function mapDispatchToProps(dispatch) {
-	return {
-		onHandleClick: (id, isFavorite) => {
-			if (isFavorite) {
-				dispatch({ type: content.types.REMOVE_FAVORITE, id });
-			} else {
-				dispatch({ type: content.types.ADD_FAVORITE, id });
-			}
-		},
-		onLoading: () => {
-			dispatch({ type: content.types.GET_MOVIES });
-		},
-		onSuccess: (payload) => {
-			dispatch({ type: content.types.GET_MOVIES_SUCCESS, payload });
-		},
-		onFailure: () => {
-			dispatch({ type: content.types.GET_MOVIES_FAILURE });
-		},
-		logOut: (token) => {
-			if (token) {
-				dispatch({ type: auth.types.DELETE_TOKEN, token });
-			}
-		},
-	};
-}
+					// logOut: auth.actions.logOut,
+					// onLoading: content.actions.onLoading,
 
-export default connect(mapStateToProps, mapDispatchToProps)(SingleMovie);
+					// onSuccess: content.actions.onSuccess,
+
+					// onFailure: content.actions.onFailure,
+					getMovies: content.actions.getMovies,
+				},
+				dispatch
+			)
+	)
+);
+
+export default enhance(SingleMovie);

@@ -1,8 +1,9 @@
-import { useCallback, useEffect } from 'react';
+import { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-import { API } from '../../constants';
+// import { API } from '../../constants';
 import { connect } from 'react-redux';
+import { compose, bindActionCreators } from 'redux';
 
 import './MyPage.css';
 import logo from '../../images/logo.svg';
@@ -14,6 +15,7 @@ import MovieCard from '../../components/MovieCard';
 
 import auth from '../../../auth';
 import content from '../../../content';
+// import { getMovies } from '../../../content/selectors';
 
 function MyPage({
 	favorites,
@@ -23,43 +25,44 @@ function MyPage({
 	errorState,
 	logOut,
 	movies,
+	getMovies,
 	onLoading,
 	onSuccess,
 	onFailure,
 }) {
 	const navigate = useNavigate();
-	const tokenNumber = token;
+	// const tokenNumber = token;
 
 	const singleMovieClicked = (id) => {
 		navigate(`/singleMovie/${id}`);
 	};
 
-	const fetchData = useCallback(async () => {
-		onLoading();
+	// const fetchData = useCallback(async () => {
+	// 	onLoading();
 
-		try {
-			const result = await fetch(API.paidMovies, {
-				method: 'GET',
-				headers: {
-					Authorization: tokenNumber,
-				},
-			});
+	// 	try {
+	// 		const result = await fetch(API.paidMovies, {
+	// 			method: 'GET',
+	// 			headers: {
+	// 				Authorization: tokenNumber,
+	// 			},
+	// 		});
 
-			if (result.status >= 400 && result.status <= 599) {
-				throw new Error('failed to load');
-			} else {
-				let response = await result.json();
+	// 		if (result.status >= 400 && result.status <= 599) {
+	// 			throw new Error('failed to load');
+	// 		} else {
+	// 			let response = await result.json();
 
-				onSuccess(response);
-			}
-		} catch (error) {
-			onFailure();
-		}
-	}, [onLoading, onSuccess, onFailure, tokenNumber]);
+	// 			onSuccess(response);
+	// 		}
+	// 	} catch (error) {
+	// 		onFailure();
+	// 	}
+	// }, [onLoading, onSuccess, onFailure, tokenNumber]);
 
 	useEffect(() => {
-		fetchData();
-	}, [fetchData]);
+		getMovies('all');
+	}, [getMovies]);
 
 	return (
 		<div className="App">
@@ -100,40 +103,31 @@ function MyPage({
 	);
 }
 
-function mapStateToProps(state) {
-	return {
-		favorites: content.selectors.getFavorites(state),
-		token: auth.selectors.getToken(state),
-		loadingState: content.selectors.getMoviesLoading(state),
-		errorState: content.selectors.getMoviesError(state),
-		movies: content.selectors.getMovies(state),
-	};
-}
+const enhance = compose(
+	connect(
+		(state) => ({
+			favorites: content.selectors.getFavorites(state),
+			token: auth.selectors.getToken(state),
+			loadingState: content.selectors.getMoviesLoading(state),
+			errorState: content.selectors.getMoviesError(state),
+			movies: content.selectors.getMovies(state),
+		}),
+		(dispatch) =>
+			bindActionCreators(
+				{
+					onHandleClick: content.actions.onHandleClick,
 
-function mapDispatchToProps(dispatch) {
-	return {
-		onHandleClick: (id, isFavorite) => {
-			if (isFavorite) {
-				dispatch({ type: connect.types.REMOVE_FAVORITE, id });
-			} else {
-				dispatch({ type: connect.types.ADD_FAVORITE, id });
-			}
-		},
-		logOut: (token) => {
-			if (token) {
-				dispatch({ type: auth.types.DELETE_TOKEN, token });
-			}
-		},
-		onLoading: () => {
-			dispatch({ type: connect.types.GET_MOVIES });
-		},
-		onSuccess: (payload) => {
-			dispatch({ type: connect.types.GET_MOVIES_SUCCESS, payload });
-		},
-		onFailure: () => {
-			dispatch({ type: connect.types.GET_MOVIES_FAILURE });
-		},
-	};
-}
+					logOut: auth.actions.logOut,
+					onLoading: content.actions.onLoading,
 
-export default connect(mapStateToProps, mapDispatchToProps)(MyPage);
+					onSuccess: content.actions.onSuccess,
+
+					onFailure: content.actions.onFailure,
+					getMovies: content.actions.getMovies,
+				},
+				dispatch
+			)
+	)
+);
+
+export default enhance(MyPage);

@@ -1,7 +1,5 @@
-// import { useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
-// import { FAVORITES_STORAGE } from '../constants';
 
 import SingleMovie from './pages/SingleMovie/SingleMovie';
 import Home from './pages/Home/Home';

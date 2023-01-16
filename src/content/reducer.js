@@ -31,7 +31,7 @@ function reducer(state = FIRST_STATE, action) {
 			return { ...state, favorites: newFavoriteMovies };
 		}
 		case TYPES.GET_MOVIES: {
-			return { ...state, loading: true };
+			return { ...state, loading: true, error: false };
 		}
 		case TYPES.GET_MOVIES_SUCCESS: {
 			console.log('PAYOLOAD: ' + action.payload);

@@ -6,6 +6,7 @@ import Footer from '../../components/Footer';
 import { FaEye } from 'react-icons/fa';
 
 import { connect } from 'react-redux';
+import { compose, bindActionCreators } from 'redux';
 
 import './SignIn.css';
 // import * as AUTH_TYPES from '../../../auth/types';
@@ -119,26 +120,19 @@ function SignInUseState({
 	);
 }
 
-function mapStateToProps(state) {
-	return {
-		token: auth.selectors.getToken(state),
-		loadingState: auth.selectors.getLoading(state),
-		errorMessage: auth.selectors.getError(state),
-	};
-}
+const enhance = compose(
+	connect(
+		(state) => ({
+			token: auth.selectors.getToken(state),
+			loadingState: auth.selectors.getLoading(state),
+			errorMessage: auth.selectors.getError(state),
+		}),
+		(dispatch) => ({
+			loginFetch: bindActionCreators(auth.actions.loginFetch, dispatch),
+			loginSuccess: bindActionCreators(auth.actions.loginSuccess, dispatch),
+			loginFailure: bindActionCreators(auth.actions.loginFailure, dispatch),
+		})
+	)
+);
 
-function mapDispatchToProps(dispatch) {
-	return {
-		loginFetch: () => {
-			dispatch({ type: auth.types.LOGIN });
-		},
-		loginSuccess: (token) => {
-			dispatch({ type: auth.types.LOGIN_SUCCESS, token });
-		},
-		loginFailure: (payload) => {
-			dispatch({ type: auth.types.LOGIN_FAILURE, payload });
-		},
-	};
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(SignInUseState);
+export default enhance(SignInUseState);

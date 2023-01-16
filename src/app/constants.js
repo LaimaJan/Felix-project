@@ -7,5 +7,5 @@ export const API = {
 	login: `${API_DOMAIN}/auth/login`,
 	freeMovies: `${API_DOMAIN}/content/free-items`,
 	paidMovies: `${API_DOMAIN}/content/items`,
-	// singleMovie: (id) => `${API_DOMAIN}/content/items/${id}`,
+	singleMovie: (id) => `${API_DOMAIN}/singleMovie/${id}`,
 };

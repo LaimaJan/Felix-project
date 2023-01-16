@@ -12,8 +12,8 @@ function tokenReducer(state = TOKEN_STATE, action) {
 		case TYPES.LOGIN:
 			return { ...state, loading: true, error: null };
 		case TYPES.LOGIN_SUCCESS:
-			window.localStorage.removeItem(TOKEN_STORAGE);
-			window.localStorage.setItem(TOKEN_STORAGE, action.token);
+			// window.localStorage.removeItem(TOKEN_STORAGE);
+			// window.localStorage.setItem(TOKEN_STORAGE, action.token);
 
 			return { ...state, loading: false, token: action.token };
 
@@ -28,7 +28,9 @@ function tokenReducer(state = TOKEN_STATE, action) {
 
 			return { ...state, loading: false, error: errorMessage };
 		}
-
+		// case: TYPES.LOGOUT: {
+		// 	return	{...TOKEN_STATE,token: null }
+		// }
 		default:
 			return state;
 	}
