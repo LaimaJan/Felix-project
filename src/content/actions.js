@@ -1,19 +1,43 @@
+import { createAction } from 'redux-api-middleware';
 import * as TYPES from './types';
 import { API } from '../app/constants';
 import * as selectors from './selectors';
 import auth from '../auth';
 
-export const onHandleClick =
-	(id) =>
-	({ dispatch, getState }) => {
-		console.log('getSTATES' + getState());
-		const favorites = selectors.getFavorites(getState());
-		const isFavorite = favorites.includes(id);
+export const onHandleClick = (id) => (dispatch, getState) => {
+	console.log('getSTATES' + getState());
+	const favorites = selectors.getFavorites(getState());
+	const isFavorite = favorites.includes(id);
 
-		dispatch({
-			type: isFavorite ? TYPES.REMOVE_FAVORITE : TYPES.ADD_FAVORITE,
-			id,
-		});
+	dispatch({
+		type: isFavorite ? TYPES.REMOVE_FAVORITE : TYPES.ADD_FAVORITE,
+		id,
+	});
+};
+
+export const getMoviesApi =
+	(movieType = 'free', movieId) =>
+	(dispatch, getState) => {
+		// console.log('getState is actions.js PAGE: ', getState);
+		const token = auth.selectors.getToken(getState());
+		const endpoint = {
+			all: API.paidMovies,
+			free: API.freeMovies,
+			single: API.singleMovie(movieId),
+		}[movieType];
+
+		dispatch(
+			createAction({
+				endpoint,
+				method: 'GET',
+				headers: { authorization: token },
+				types: [
+					TYPES.GET_MOVIES,
+					TYPES.GET_MOVIES_SUCCESS,
+					TYPES.GET_MOVIES_FAILURE,
+				],
+			})
+		);
 	};
 
 export const onLoading = () => (dispatch) => {
@@ -52,7 +76,8 @@ export const getMovies =
 
 			dispatch({
 				type: TYPES.GET_MOVIES_SUCCESS,
-				payload: Array.isArray(payload) ? payload : [payload],
+				payload,
+				// payload: Array.isArray(payload) ? payload : [payload],
 			});
 		} catch (error) {
 			dispatch({ type: TYPES.GET_MOVIES_FAILURE });

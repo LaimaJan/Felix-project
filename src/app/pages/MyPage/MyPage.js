@@ -87,7 +87,7 @@ function MyPage({
 							description={description}
 							image={image}
 							isFavorite={favorites.includes(id)}
-							onHandleClick={() => onHandleClick(id, favorites.includes(id))}
+							onHandleClick={() => onHandleClick(id)}
 							singleMovie={() => singleMovieClicked(id)}
 						/>
 					))}

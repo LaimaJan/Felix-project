@@ -6,14 +6,10 @@ import Button from '../../components/Button';
 import Footer from '../../components/Footer';
 import SingleMovieCard from '../../components/SingleMovieCard/SingleMovieCard';
 
-// import { API } from '../../constants';
 import { connect } from 'react-redux';
 import { compose, bindActionCreators } from 'redux';
 
 import './SingleMovie.css';
-
-// import * as AUTH_TYPES from '../../../auth/types';
-// import * as CONTENT_TYPES from '../../../content/types';
 
 import auth from '../../../auth';
 import content from '../../../content';
@@ -44,42 +40,10 @@ function SingleMovie({
 	};
 
 	const { id } = useParams();
-	console.log(id);
-	console.log(movies);
+	console.log('id of single movie PAGE: ', id);
 
-	// const fetchData = useCallback(
-	// 	async (id) => {
-	// 		onLoading();
-
-	// 		try {
-	// 			const tokenNumber = token;
-	// 			console.log(token);
-	// 			const result = await fetch(`${API.paidMovies}/${id}`, {
-	// 				method: 'GET',
-	// 				headers: {
-	// 					Authorization: tokenNumber,
-	// 				},
-	// 			});
-	// 			if (result.status >= 400 && result.status <= 599) {
-	// 				throw new Error('failed to load');
-	// 			} else {
-	// 				let response = await result.json();
-
-	// 				console.log(response);
-	// 				onSuccess(response);
-	// 			}
-	// 		} catch (error) {
-	// 			onFailure();
-	// 		}
-	// 	},
-	// 	[onLoading, onSuccess, onFailure, token]
-	// );
-
-	// useEffect(() => {
-	// 	console.log('CONSOLE LOGAS');
-
-	// 	fetchData(id);
-	// }, [id, fetchData]);
+	const movie = movies.filter((movies) => id === movies.id);
+	console.log('VIENAS FILMAS: ', movie);
 
 	useEffect(() => {
 		getMovies('single', id);
@@ -96,15 +60,15 @@ function SingleMovie({
 				<main>
 					{loadingState && <img src={logo} className="App-logo" alt="logo" />}
 					{errorState && <p>Whoops! Failed to Load! 🙊</p>}
-					{movies[0] && (
+					{movie[0] && (
 						<SingleMovieCard
-							id={movies[0].id}
-							key={movies[0].id}
-							title={movies[0].title}
-							description={movies[0].description}
-							image={movies[0].image}
-							onHandleClick={() => onHandleClick(id, favorites.includes(id))}
-							isFavorite={favorites.includes(movies[0].id)}
+							id={movie[0].id}
+							key={movie[0].id}
+							title={movie[0].title}
+							description={movie[0].description}
+							image={movie[0].image}
+							onHandleClick={() => onHandleClick(id)}
+							isFavorite={favorites.includes(movie[0].id)}
 							clickWatchTrailer={watchTrailer}
 						/>
 					)}
@@ -115,10 +79,10 @@ function SingleMovie({
 				className={openModal ? 'show-video-modal' : 'disable-video-modal'}
 				onClick={exitTrailer}
 			>
-				{movies[0] && (
+				{movie[0] && (
 					<iframe
 						title="movieTrailer"
-						src={movies[0].video}
+						src={movie[0].video}
 						frameBorder="0"
 						allowFullScreen
 					/>
