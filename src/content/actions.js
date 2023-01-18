@@ -1,44 +1,63 @@
-import { createAction } from 'redux-api-middleware';
+import { createAction } from '@reduxjs/toolkit';
+// import { createAction as createApiAction, RSAA } from 'redux-api-middleware';
+
 import * as TYPES from './types';
 import { API } from '../app/constants';
 import * as selectors from './selectors';
 import auth from '../auth';
 
+const addFavorite = createAction(TYPES.ADD_FAVORITE, (id) => {
+	return {
+		payload: id,
+		meta: {
+			id,
+			timeStamp: new Date().toISOString(),
+		},
+	};
+});
+const removeFavorite = createAction(TYPES.REMOVE_FAVORITE);
+
 export const onHandleClick = (id) => (dispatch, getState) => {
 	console.log('getSTATES' + getState());
 	const favorites = selectors.getFavorites(getState());
-	const isFavorite = favorites.includes(id);
+	console.log('LOG', selectors.getFavorites(getState()), id);
 
-	dispatch({
-		type: isFavorite ? TYPES.REMOVE_FAVORITE : TYPES.ADD_FAVORITE,
-		id,
-	});
+	if (favorites.includes(id)) {
+		dispatch(removeFavorite(id));
+	} else {
+		dispatch(addFavorite(id));
+	}
+
+	// dispatch({
+	// 	type: isFavorite ? TYPES.REMOVE_FAVORITE : TYPES.ADD_FAVORITE,
+	// 	id,
+	// });
 };
 
-export const getMoviesApi =
-	(movieType = 'free', movieId) =>
-	(dispatch, getState) => {
-		// console.log('getState is actions.js PAGE: ', getState);
-		const token = auth.selectors.getToken(getState());
-		const endpoint = {
-			all: API.paidMovies,
-			free: API.freeMovies,
-			single: API.singleMovie(movieId),
-		}[movieType];
+// export const getMoviesApi =
+// 	(movieType = 'free', movieId) =>
+// 	(dispatch, getState) => {
+// 		// console.log('getState is actions.js PAGE: ', getState);
+// 		const token = auth.selectors.getToken(getState());
+// 		const endpoint = {
+// 			all: API.paidMovies,
+// 			free: API.freeMovies,
+// 			single: API.singleMovie(movieId),
+// 		}[movieType];
 
-		dispatch(
-			createAction({
-				endpoint,
-				method: 'GET',
-				headers: { authorization: token },
-				types: [
-					TYPES.GET_MOVIES,
-					TYPES.GET_MOVIES_SUCCESS,
-					TYPES.GET_MOVIES_FAILURE,
-				],
-			})
-		);
-	};
+// 		dispatch(
+// 			createApiAction({
+// 				endpoint,
+// 				method: 'GET',
+// 				headers: { authorization: token },
+// 				types: [
+// 					TYPES.GET_MOVIES,
+// 					TYPES.GET_MOVIES_SUCCESS,
+// 					TYPES.GET_MOVIES_FAILURE,
+// 				],
+// 			})
+// 		);
+// 	};
 
 export const onLoading = () => (dispatch) => {
 	dispatch({ type: TYPES.GET_MOVIES });

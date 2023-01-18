@@ -13,31 +13,37 @@ console.log('moviesmovies: ' + FIRST_STATE.movies);
 function reducer(state = FIRST_STATE, action) {
 	switch (action.type) {
 		case TYPES.ADD_FAVORITE:
-			const newFavoriteMovies = state.favorites.concat(action.id);
-			console.log('action.id: ' + newFavoriteMovies);
-			console.log(window.localStorage);
+			// const newFavoriteMovies = state.favorites.concat(action.id);
+			// console.log('action.id: ' + newFavoriteMovies);
+			// console.log(window.localStorage);
 
-			window.localStorage.setItem(
-				FAVORITES_STORAGE,
-				JSON.stringify(newFavoriteMovies)
-			);
+			// window.localStorage.setItem(
+			// 	FAVORITES_STORAGE,
+			// 	JSON.stringify(newFavoriteMovies)
+			console.log('ACTIONAS', action);
+			// );
 			console.log('IDEJO I LOCAL STORAGE');
 			return { ...state, favorites: state.favorites.concat(action.id) };
 
 		case TYPES.REMOVE_FAVORITE: {
-			const newFavoriteMovies = state.favorites.filter(
-				(movieId) => movieId !== action.id
-			);
+			// const newFavoriteMovies = state.favorites.filter(
+			// 	(movieId) => movieId !== action.id
+			// );
 
-			window.localStorage.setItem(
-				FAVORITES_STORAGE,
-				JSON.stringify(newFavoriteMovies)
-			);
-			return { ...state, favorites: newFavoriteMovies };
+			// window.localStorage.setItem(
+			// 	FAVORITES_STORAGE,
+			// 	JSON.stringify(newFavoriteMovies)
+			// );
+			return {
+				...state,
+				favorites: state.favorites.filter((id) => id !== action.payload),
+			};
 		}
+
 		case TYPES.GET_MOVIES: {
 			return { ...state, loading: true, error: false };
 		}
+
 		case TYPES.GET_MOVIES_SUCCESS: {
 			console.log('PAYLOAD: ' + action.payload);
 			return {
