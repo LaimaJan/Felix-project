@@ -1,9 +1,7 @@
 import { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-
-// import { API } from '../../constants';
-import { connect } from 'react-redux';
-import { compose, bindActionCreators } from 'redux';
+import { useSelector, useDispatch } from 'react-redux';
+// import { compose, bindActionCreators } from 'redux';
 
 import './MyPage.css';
 import logo from '../../images/logo.svg';
@@ -15,60 +13,32 @@ import MovieCard from '../../components/MovieCard';
 
 import auth from '../../../auth';
 import content from '../../../content';
-// import { getMovies } from '../../../content/selectors';
 
-function MyPage({
-	favorites,
-	token,
-	onHandleClick,
-	loadingState,
-	errorState,
-	logOut,
-	movies,
-	getMovies,
-	onLoading,
-	onSuccess,
-	onFailure,
-}) {
+function MyPage() {
+	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	// const tokenNumber = token;
 
 	const singleMovieClicked = (id) => {
 		navigate(`/singleMovie/${id}`);
 	};
 
-	// const fetchData = useCallback(async () => {
-	// 	onLoading();
-
-	// 	try {
-	// 		const result = await fetch(API.paidMovies, {
-	// 			method: 'GET',
-	// 			headers: {
-	// 				Authorization: tokenNumber,
-	// 			},
-	// 		});
-
-	// 		if (result.status >= 400 && result.status <= 599) {
-	// 			throw new Error('failed to load');
-	// 		} else {
-	// 			let response = await result.json();
-
-	// 			onSuccess(response);
-	// 		}
-	// 	} catch (error) {
-	// 		onFailure();
-	// 	}
-	// }, [onLoading, onSuccess, onFailure, tokenNumber]);
+	const favorites = useSelector(content.selectors.getFavorites);
+	const token = useSelector(auth.selectors.getToken);
+	const loadingState = useSelector(content.selectors.getMoviesLoading);
+	const errorState = useSelector(content.selectors.getMoviesError);
+	const movies = useSelector(content.selectors.getMovies);
 
 	useEffect(() => {
-		getMovies('all');
-	}, [getMovies]);
+		dispatch(content.actions.getMovies('all'));
+	}, [dispatch]);
 
 	return (
 		<div className="App">
 			<Header className="header">
 				<Link to="/">
-					<Button onClick={() => logOut(token)}>Logout</Button>
+					<Button onClick={() => dispatch(auth.actions.logOut(token))}>
+						Logout
+					</Button>
 				</Link>
 			</Header>
 
@@ -87,7 +57,7 @@ function MyPage({
 							description={description}
 							image={image}
 							isFavorite={favorites.includes(id)}
-							onHandleClick={() => onHandleClick(id)}
+							onHandleClick={() => dispatch(content.actions.onHandleClick(id))}
 							singleMovie={() => singleMovieClicked(id)}
 						/>
 					))}
@@ -103,31 +73,4 @@ function MyPage({
 	);
 }
 
-const enhance = compose(
-	connect(
-		(state) => ({
-			favorites: content.selectors.getFavorites(state),
-			token: auth.selectors.getToken(state),
-			loadingState: content.selectors.getMoviesLoading(state),
-			errorState: content.selectors.getMoviesError(state),
-			movies: content.selectors.getMovies(state),
-		}),
-		(dispatch) =>
-			bindActionCreators(
-				{
-					onHandleClick: content.actions.onHandleClick,
-
-					logOut: auth.actions.logOut,
-					onLoading: content.actions.onLoading,
-
-					onSuccess: content.actions.onSuccess,
-
-					onFailure: content.actions.onFailure,
-					getMovies: content.actions.getMovies,
-				},
-				dispatch
-			)
-	)
-);
-
-export default enhance(MyPage);
+export default MyPage;

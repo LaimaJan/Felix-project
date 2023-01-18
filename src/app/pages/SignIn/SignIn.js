@@ -5,21 +5,17 @@ import Button from '../../components/Button';
 import Footer from '../../components/Footer';
 import { FaEye } from 'react-icons/fa';
 
-import { connect } from 'react-redux';
-import { compose, bindActionCreators } from 'redux';
+import { useSelector, useDispatch } from 'react-redux';
+// import { compose, bindActionCreators } from 'redux';
 
 import './SignIn.css';
-// import * as AUTH_TYPES from '../../../auth/types';
-// import { getToken } from '../../../auth/selectors';
 import auth from '../../../auth';
 
-function SignInUseState({
-	loginSuccess,
-	loadingState,
-	loginFailure,
-	errorMessage,
-	loginFetch,
-}) {
+function SignInUseState() {
+	const dispatch = useDispatch();
+	const loadingState = useSelector(auth.selectors.getLoading);
+	const errorMessage = useSelector(auth.selectors.getError);
+
 	const navigate = useNavigate();
 	const [username, setUsername] = useState('');
 	const redirectLink = useLocation().state || '/myPage';
@@ -37,7 +33,7 @@ function SignInUseState({
 		if (username === '' || password === '') {
 			toggleFailMessageClass();
 		} else {
-			loginFetch();
+			dispatch(auth.actions.loginFetch());
 			try {
 				const response = await fetch(
 					'https://dummy-video-api.onrender.com/auth/login',
@@ -51,17 +47,19 @@ function SignInUseState({
 				);
 
 				if (response.status > 399 && response.status < 600) {
-					loginFailure(
-						response.status === 400 ? toggleFailMessageClass() : 'request'
+					dispatch(
+						auth.actions.loginFailure(
+							response.status === 400 ? toggleFailMessageClass() : 'request'
+						)
 					);
 				} else {
 					const { token } = await response.json();
 
-					loginSuccess(token);
+					dispatch(auth.actions.loginSuccess(token));
 					navigate(redirectLink);
 				}
 			} catch (error) {
-				loginFailure('request');
+				dispatch(auth.actions.loginFailure('request'));
 			}
 		}
 	};
@@ -120,19 +118,4 @@ function SignInUseState({
 	);
 }
 
-const enhance = compose(
-	connect(
-		(state) => ({
-			token: auth.selectors.getToken(state),
-			loadingState: auth.selectors.getLoading(state),
-			errorMessage: auth.selectors.getError(state),
-		}),
-		(dispatch) => ({
-			loginFetch: bindActionCreators(auth.actions.loginFetch, dispatch),
-			loginSuccess: bindActionCreators(auth.actions.loginSuccess, dispatch),
-			loginFailure: bindActionCreators(auth.actions.loginFailure, dispatch),
-		})
-	)
-);
-
-export default enhance(SignInUseState);
+export default SignInUseState;

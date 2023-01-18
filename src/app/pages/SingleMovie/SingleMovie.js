@@ -6,27 +6,22 @@ import Button from '../../components/Button';
 import Footer from '../../components/Footer';
 import SingleMovieCard from '../../components/SingleMovieCard/SingleMovieCard';
 
-import { connect } from 'react-redux';
-import { compose, bindActionCreators } from 'redux';
+import { useSelector, useDispatch } from 'react-redux';
+// import { compose, bindActionCreators } from 'redux';
 
 import './SingleMovie.css';
 
 import auth from '../../../auth';
 import content from '../../../content';
 
-function SingleMovie({
-	movies,
-	favorites,
-	onHandleClick,
-	loadingState,
-	errorState,
-	token,
-	logOut,
-	getMovies,
-	onLoading,
-	onSuccess,
-	onFailure,
-}) {
+function SingleMovie() {
+	const dispatch = useDispatch();
+	const favorites = useSelector(content.selectors.getFavorites);
+	const token = useSelector(auth.selectors.getToken);
+	const loadingState = useSelector(content.selectors.getMoviesLoading);
+	const errorState = useSelector(content.selectors.getMoviesError);
+	const movies = useSelector(content.selectors.getMovies);
+
 	const [openModal, setOpenModal] = useState(false);
 
 	const watchTrailer = () => {
@@ -46,15 +41,17 @@ function SingleMovie({
 	console.log('VIENAS FILMAS: ', movie);
 
 	useEffect(() => {
-		getMovies('single', id);
-	}, [getMovies, id]);
+		dispatch(content.actions.getMovies('single', id));
+	}, [dispatch, id]);
 
 	return (
 		<div className="content-wrapper">
 			<div className="singleMovie-wrapper">
 				<Header>
 					<Link to="/">
-						<Button onClick={() => logOut(token)}>Logout</Button>
+						<Button onClick={() => dispatch(auth.actions.logOut(token))}>
+							Logout
+						</Button>
 					</Link>
 				</Header>
 				<main>
@@ -67,7 +64,7 @@ function SingleMovie({
 							title={movie[0].title}
 							description={movie[0].description}
 							image={movie[0].image}
-							onHandleClick={() => onHandleClick(id)}
+							onHandleClick={() => dispatch(content.actions.onHandleClick(id))}
 							isFavorite={favorites.includes(movie[0].id)}
 							clickWatchTrailer={watchTrailer}
 						/>
@@ -92,31 +89,4 @@ function SingleMovie({
 	);
 }
 
-const enhance = compose(
-	connect(
-		(state) => ({
-			favorites: content.selectors.getFavorites(state),
-			movies: content.selectors.getMovies(state),
-			loadingState: content.selectors.getMoviesLoading(state),
-			errorState: content.selectors.getMoviesError(state),
-			token: auth.selectors.getToken(state),
-		}),
-		(dispatch) =>
-			bindActionCreators(
-				{
-					onHandleClick: content.actions.onHandleClick,
-
-					// logOut: auth.actions.logOut,
-					// onLoading: content.actions.onLoading,
-
-					// onSuccess: content.actions.onSuccess,
-
-					// onFailure: content.actions.onFailure,
-					getMovies: content.actions.getMovies,
-				},
-				dispatch
-			)
-	)
-);
-
-export default enhance(SingleMovie);
+export default SingleMovie;

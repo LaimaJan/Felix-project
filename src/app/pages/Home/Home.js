@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { compose, bindActionCreators } from 'redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import './App.css';
 import logo from '../../images/logo.svg';
@@ -10,25 +9,19 @@ import Footer from '../../components/Footer';
 import Hero from '../../components/Hero';
 import Button from '../../components/Button';
 import MovieCard from '../../components/MovieCard';
+
 import content from '../../../content';
 
-function Home({
-	favorites,
-	onHandleClick,
-	onLoading,
-	onSuccess,
-	onFailure,
-	getMovies,
-	movies,
-	loadingState,
-	errorState,
-}) {
-	// console.log('movies is HOME PAGE' + movies);
+function Home() {
+	const dispatch = useDispatch();
+	const favorites = useSelector(content.selectors.getFavorites);
+	const movies = useSelector(content.selectors.getMovies);
+	const loadingState = useSelector(content.selectors.getMoviesLoading);
+	const errorState = useSelector(content.selectors.getMoviesError);
 
 	useEffect(() => {
-		// fetchData();
-		getMovies('free');
-	}, [getMovies]);
+		dispatch(content.actions.getMovies('free'));
+	}, [dispatch]);
 
 	return (
 		<div className="App">
@@ -57,7 +50,7 @@ function Home({
 							description={description}
 							image={image}
 							isFavorite={favorites.includes(id)}
-							onHandleClick={() => onHandleClick(id)}
+							onHandleClick={() => dispatch(content.actions.onHandleClick(id))}
 						/>
 					))}
 				</div>
@@ -73,27 +66,4 @@ function Home({
 	);
 }
 
-const enhance = compose(
-	connect(
-		(state) => ({
-			favorites: content.selectors.getFavorites(state),
-			loading: content.selectors.getMoviesLoading(state),
-			error: content.selectors.getMoviesError(state),
-			movies: content.selectors.getMovies(state),
-		}),
-
-		(dispatch) =>
-			bindActionCreators(
-				{
-					onHandleClick: content.actions.onHandleClick,
-					// onLoading: content.actions.onLoading,
-					// onSuccess: content.actions.onSuccess,
-					// onFailure: content.actions.onFailure,
-					getMovies: content.actions.getMovies,
-				},
-				dispatch
-			)
-	)
-);
-
-export default enhance(Home);
+export default Home;
