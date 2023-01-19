@@ -1,6 +1,6 @@
-import React, { useState, useCallback, useEffect } from 'react';
-import { FavoritesContext } from '../../context/FavoritesContext';
-import { TokenContext } from '../../context/TokenContext';
+import { useEffect, useContext } from 'react';
+import { ContentContext } from '../../context/ContentContext';
+// import { AuthContext } from '../../context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 
 import './MyPage.css';
@@ -13,14 +13,14 @@ import MovieCard from '../../components/MovieCard';
 
 function MyPage() {
 	const navigate = useNavigate();
-	const [allFilms, setAllFilms] = useState([]);
-	const [loading, setLoading] = useState(false);
-	const [error, setError] = useState(false);
+	// const [allFilms, setAllFilms] = useState([]);
+	// const [loading, setLoading] = useState(false);
+	// const [error, setError] = useState(false);
 
-	const { handleClick } = React.useContext(FavoritesContext);
-	const { favorites } = React.useContext(FavoritesContext);
-	const { token } = React.useContext(TokenContext);
-	const tokenNumber = token;
+	const { handleClick, favorites, getMovies, error, loading, movies } =
+		useContext(ContentContext);
+	// const { token } = useContext(AuthContext);
+	// const tokenNumber = token;
 
 	const singleMovieClicked = (id) => {
 		console.log('Pries function: ' + id);
@@ -32,37 +32,37 @@ function MyPage() {
 		localStorage.removeItem('token');
 	};
 
-	const fetchData = useCallback(async () => {
-		setLoading(false);
+	// const fetchData = useCallback(async () => {
+	// 	setLoading(false);
 
-		try {
-			const result = await fetch(
-				'https://dummy-video-api.onrender.com/content/items',
-				{
-					method: 'GET',
-					headers: {
-						Authorization: tokenNumber,
-					},
-				}
-			);
+	// 	try {
+	// 		const result = await fetch(
+	// 			'https://dummy-video-api.onrender.com/content/items',
+	// 			{
+	// 				method: 'GET',
+	// 				headers: {
+	// 					Authorization: tokenNumber,
+	// 				},
+	// 			}
+	// 		);
 
-			if (result.status >= 400 && result.status <= 599) {
-				setError(true);
-			} else {
-				let response = await result.json();
+	// 		if (result.status >= 400 && result.status <= 599) {
+	// 			setError(true);
+	// 		} else {
+	// 			let response = await result.json();
 
-				setAllFilms(response);
-			}
-		} catch (error) {
-			setError(true);
-		} finally {
-			setLoading(false);
-		}
-	}, [tokenNumber]);
+	// 			setAllFilms(response);
+	// 		}
+	// 	} catch (error) {
+	// 		setError(true);
+	// 	} finally {
+	// 		setLoading(false);
+	// 	}
+	// }, [tokenNumber]);
 
 	useEffect(() => {
-		fetchData();
-	}, [fetchData]);
+		getMovies('all');
+	}, []);
 
 	return (
 		<div className="App">
@@ -79,7 +79,7 @@ function MyPage() {
 					{loading && <img src={logo} className="App-logo" alt="logo" />}
 					{error && <p>Whoops! Failed to Load! 🙊</p>}
 
-					{allFilms.map(({ title, id, image, description }) => (
+					{movies.map(({ title, id, image, description }) => (
 						<MovieCard
 							id={id}
 							key={id}

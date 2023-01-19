@@ -4,7 +4,7 @@ import Header from '../../components/Header';
 import Button from '../../components/Button';
 import Footer from '../../components/Footer';
 import { FaEye } from 'react-icons/fa';
-import { TokenContext } from '../../context/TokenContext';
+import { AuthContext } from '../../context/AuthContext';
 
 import './SignIn.css';
 
@@ -21,7 +21,7 @@ function SignInUseState() {
 		request: 'Oops! Something expolded!',
 	}[errorType];
 
-	const { updateToken } = useContext(TokenContext);
+	const { updateToken } = useContext(AuthContext);
 
 	const managePasswordVisibility = () => {
 		setHidePassword(!hidePassword);

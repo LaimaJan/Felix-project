@@ -1,9 +1,9 @@
 import { Navigate, Outlet, useHref } from 'react-router-dom';
-import { TokenContext } from '../../context/TokenContext';
+import { AuthContext } from '../../context/AuthContext';
 import { useContext } from 'react';
 
 function PrivateRoute() {
-	const { token } = useContext(TokenContext);
+	const { token } = useContext(AuthContext);
 	const href = useHref();
 
 	if (!token) {

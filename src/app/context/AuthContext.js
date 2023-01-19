@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import { useState, createContext } from 'react';
 
-const TokenContext = React.createContext();
+const AuthContext = createContext();
 
 const TokenProvider = ({ children }) => {
 	const [token, setToken] = useState(
@@ -13,10 +13,10 @@ const TokenProvider = ({ children }) => {
 	};
 
 	return (
-		<TokenContext.Provider value={{ token, updateToken }}>
+		<AuthContext.Provider value={{ token, updateToken }}>
 			{children}
-		</TokenContext.Provider>
+		</AuthContext.Provider>
 	);
 };
 
-export { TokenContext, TokenProvider };
+export { AuthContext, TokenProvider };

@@ -1,5 +1,5 @@
-import React, { useState, useCallback, useEffect } from 'react';
-import { FavoritesContext } from '../../context/FavoritesContext';
+import { useState, useEffect, useContext } from 'react';
+import { ContentContext } from '../../context/ContentContext';
 import logo from '../../images/logo.svg';
 import { useNavigate, useParams } from 'react-router-dom';
 import Header from '../../components/Header';
@@ -11,13 +11,13 @@ import './SingleMovie.css';
 
 function SingleMovie() {
 	const navigate = useNavigate();
-	const [loading, setLoading] = useState(false);
-	const [error, setError] = useState(false);
+	// const [loading, setLoading] = useState(false);
+	// const [error, setError] = useState(false);
 	const [openModal, setOpenModal] = useState(false);
-	const [singleMovie, setSingleMovie] = useState([]);
+	// const [singleMovie, setSingleMovie] = useState([]);
 
-	const { handleClick } = React.useContext(FavoritesContext);
-	const { favorites } = React.useContext(FavoritesContext);
+	const { handleClick, favorites, getMovies, error, loading, movies } =
+		useContext(ContentContext);
 
 	const logOut = () => {
 		localStorage.removeItem('token');
@@ -35,39 +35,41 @@ function SingleMovie() {
 	};
 
 	const { id } = useParams();
+	console.log('SINGLE M ID', id);
+	console.log('SINGLE MOVIE INFO', movies);
 
-	const fetchData = useCallback(async (id) => {
-		setLoading(false);
+	// const fetchData = useCallback(async (id) => {
+	// 	setLoading(false);
 
-		try {
-			const tokenNumber = localStorage.getItem('token');
-			const result = await fetch(
-				`https://dummy-video-api.onrender.com/content/items/${id}`,
-				{
-					method: 'GET',
-					headers: {
-						Authorization: tokenNumber,
-					},
-				}
-			);
-			if (result.status >= 400 && result.status <= 599) {
-				setError(true);
-			} else {
-				let response = await result.json();
-				// console.log(response);
-				setSingleMovie(response);
-			}
-		} catch (error) {
-			setError(true);
-		} finally {
-			setLoading(false);
-		}
-	}, []);
+	// 	try {
+	// 		const tokenNumber = localStorage.getItem('token');
+	// 		const result = await fetch(
+	// 			`https://dummy-video-api.onrender.com/content/items/${id}`,
+	// 			{
+	// 				method: 'GET',
+	// 				headers: {
+	// 					Authorization: tokenNumber,
+	// 				},
+	// 			}
+	// 		);
+	// 		if (result.status >= 400 && result.status <= 599) {
+	// 			setError(true);
+	// 		} else {
+	// 			let response = await result.json();
+	// 			// console.log(response);
+	// 			setSingleMovie(response);
+	// 		}
+	// 	} catch (error) {
+	// 		setError(true);
+	// 	} finally {
+	// 		setLoading(false);
+	// 	}
+	// }, []);
 
 	useEffect(() => {
 		// console.log(id);
-		fetchData(id);
-	}, [id, fetchData]);
+		getMovies('single', id);
+	}, [id]);
 
 	return (
 		<div className="content-wrapper">
@@ -79,13 +81,13 @@ function SingleMovie() {
 					{loading && <img src={logo} className="App-logo" alt="logo" />}
 					{error && <p>Whoops! Failed to Load! 🙊</p>}
 					<SingleMovieCard
-						id={singleMovie.id}
-						key={singleMovie.id}
-						title={singleMovie.title}
-						description={singleMovie.description}
-						image={singleMovie.image}
-						onHandleClick={() => handleClick(singleMovie.id)}
-						isFavorite={favorites.includes(singleMovie.id)}
+						id={movies.id}
+						key={movies.id}
+						title={movies.title}
+						description={movies.description}
+						image={movies.image}
+						onHandleClick={() => handleClick(movies.id)}
+						isFavorite={favorites.includes(movies.id)}
 						clickWatchTrailer={watchTrailer}
 					/>
 				</main>
@@ -97,7 +99,7 @@ function SingleMovie() {
 			>
 				<iframe
 					title="movieTrailer"
-					src={singleMovie.video}
+					src={movies.video}
 					frameBorder="0"
 					allowFullScreen
 				/>

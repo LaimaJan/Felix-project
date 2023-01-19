@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { FavoritesContext } from '../../context/FavoritesContext';
+import { useEffect, useContext } from 'react';
+import { ContentContext } from '../../context/ContentContext';
 import { Link } from 'react-router-dom';
 
 import './App.css';
@@ -11,38 +11,41 @@ import Button from '../../components/Button';
 import MovieCard from '../../components/MovieCard';
 
 function Home() {
-	const [freeFilms, setFreeFilms] = useState([]);
-	const [loading, setLoading] = useState(false);
-	const [error, setError] = useState(false);
+	// const [freeFilms, setFreeFilms] = useState([]);
+	// const [loading, setLoading] = useState(false);
+	// const [error, setError] = useState(false);
 
-	const { handleClick } = React.useContext(FavoritesContext);
-	const { favorites } = React.useContext(FavoritesContext);
+	const { handleClick, favorites, getMovies, error, loading, movies } =
+		useContext(ContentContext);
 
-	const fetchData = useCallback(async () => {
-		setLoading(false);
+	console.log('filmai', movies);
+	// console.log('eroras', error);
 
-		try {
-			const result = await fetch(
-				'https://dummy-video-api.onrender.com/content/free-items'
-			);
-			console.log(result);
+	// const fetchData = useCallback(async () => {
+	// 	setLoading(false);
 
-			if (result.status >= 400 && result.status <= 599) {
-				throw new Error('failed to load');
-			} else {
-				const json = await result.json();
-				setFreeFilms(json);
-			}
-		} catch (error) {
-			setError(true);
-		} finally {
-			setLoading(false);
-		}
-	}, []);
+	// 	try {
+	// 		const result = await fetch(
+	// 			'https://dummy-video-api.onrender.com/content/free-items'
+	// 		);
+	// 		console.log(result);
+
+	// 		if (result.status >= 400 && result.status <= 599) {
+	// 			throw new Error('failed to load');
+	// 		} else {
+	// 			const json = await result.json();
+	// 			setFreeFilms(json);
+	// 		}
+	// 	} catch (error) {
+	// 		setError(true);
+	// 	} finally {
+	// 		setLoading(false);
+	// 	}
+	// }, []);
 
 	useEffect(() => {
-		fetchData();
-	}, [fetchData]);
+		getMovies('free');
+	}, []);
 
 	return (
 		<div className="App">
@@ -63,7 +66,7 @@ function Home() {
 					{loading && <img src={logo} className="App-logo" alt="logo" />}
 					{error && <p>Whoops! Failed to Load!</p>}
 
-					{freeFilms.map(({ title, id, image, description }) => (
+					{movies.map(({ title, id, image, description }) => (
 						<MovieCard
 							id={id}
 							key={id}
