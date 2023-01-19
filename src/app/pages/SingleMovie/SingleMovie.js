@@ -1,4 +1,5 @@
-import { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
+import { FavoritesContext } from '../../context/FavoritesContext';
 import logo from '../../images/logo.svg';
 import { useNavigate, useParams } from 'react-router-dom';
 import Header from '../../components/Header';
@@ -8,12 +9,15 @@ import SingleMovieCard from '../../components/SingleMovieCard/SingleMovieCard';
 
 import './SingleMovie.css';
 
-function SingleMovie({ favorites, onHandleClick }) {
+function SingleMovie() {
 	const navigate = useNavigate();
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState(false);
 	const [openModal, setOpenModal] = useState(false);
 	const [singleMovie, setSingleMovie] = useState([]);
+
+	const { handleClick } = React.useContext(FavoritesContext);
+	const { favorites } = React.useContext(FavoritesContext);
 
 	const logOut = () => {
 		localStorage.removeItem('token');
@@ -80,7 +84,7 @@ function SingleMovie({ favorites, onHandleClick }) {
 						title={singleMovie.title}
 						description={singleMovie.description}
 						image={singleMovie.image}
-						onHandleClick={() => onHandleClick(singleMovie.id)}
+						onHandleClick={() => handleClick(singleMovie.id)}
 						isFavorite={favorites.includes(singleMovie.id)}
 						clickWatchTrailer={watchTrailer}
 					/>

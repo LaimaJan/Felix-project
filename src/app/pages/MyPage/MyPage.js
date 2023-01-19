@@ -1,4 +1,6 @@
-import { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
+import { FavoritesContext } from '../../context/FavoritesContext';
+import { TokenContext } from '../../context/TokenContext';
 import { Link, useNavigate } from 'react-router-dom';
 
 import './MyPage.css';
@@ -9,11 +11,15 @@ import Hero from '../../components/Hero';
 import Button from '../../components/Button';
 import MovieCard from '../../components/MovieCard';
 
-function MyPage({ favorites, onHandleClick, token }) {
+function MyPage() {
 	const navigate = useNavigate();
 	const [allFilms, setAllFilms] = useState([]);
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState(false);
+
+	const { handleClick } = React.useContext(FavoritesContext);
+	const { favorites } = React.useContext(FavoritesContext);
+	const { token } = React.useContext(TokenContext);
 	const tokenNumber = token;
 
 	const singleMovieClicked = (id) => {
@@ -81,7 +87,7 @@ function MyPage({ favorites, onHandleClick, token }) {
 							description={description}
 							image={image}
 							isFavorite={favorites.includes(id)}
-							onHandleClick={() => onHandleClick(id)}
+							onHandleClick={() => handleClick(id)}
 							singleMovie={() => singleMovieClicked(id)}
 						/>
 					))}

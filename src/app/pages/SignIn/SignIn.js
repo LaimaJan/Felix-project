@@ -1,13 +1,14 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Header from '../../components/Header';
 import Button from '../../components/Button';
 import Footer from '../../components/Footer';
 import { FaEye } from 'react-icons/fa';
+import { TokenContext } from '../../context/TokenContext';
 
 import './SignIn.css';
 
-function SignInUseState({ updateToken }) {
+function SignInUseState() {
 	const navigate = useNavigate();
 	const [username, setUsername] = useState('');
 	const redirectLink = useLocation().state || '/myPage';
@@ -19,6 +20,8 @@ function SignInUseState({ updateToken }) {
 	const errorMessage = {
 		request: 'Oops! Something expolded!',
 	}[errorType];
+
+	const { updateToken } = useContext(TokenContext);
 
 	const managePasswordVisibility = () => {
 		setHidePassword(!hidePassword);

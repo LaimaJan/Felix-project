@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { FavoritesContext } from '../../context/FavoritesContext';
 import { Link } from 'react-router-dom';
 
 import './App.css';
@@ -9,10 +10,13 @@ import Hero from '../../components/Hero';
 import Button from '../../components/Button';
 import MovieCard from '../../components/MovieCard';
 
-function Home({ favorites, onHandleClick }) {
+function Home() {
 	const [freeFilms, setFreeFilms] = useState([]);
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState(false);
+
+	const { handleClick } = React.useContext(FavoritesContext);
+	const { favorites } = React.useContext(FavoritesContext);
 
 	const fetchData = useCallback(async () => {
 		setLoading(false);
@@ -67,7 +71,7 @@ function Home({ favorites, onHandleClick }) {
 							description={description}
 							image={image}
 							isFavorite={favorites.includes(id)}
-							onHandleClick={() => onHandleClick(id)}
+							onHandleClick={() => handleClick(id)}
 						/>
 					))}
 				</div>

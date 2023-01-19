@@ -1,6 +1,9 @@
 import { Navigate, Outlet, useHref } from 'react-router-dom';
+import { TokenContext } from '../../context/TokenContext';
+import { useContext } from 'react';
 
-function PrivateRoute({ token }) {
+function PrivateRoute() {
+	const { token } = useContext(TokenContext);
 	const href = useHref();
 
 	if (!token) {
