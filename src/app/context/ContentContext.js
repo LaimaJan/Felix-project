@@ -6,7 +6,7 @@ const ContentContext = createContext();
 
 const FavoritesProvider = ({ children }) => {
 	const [favorites, setFavorites] = useState(
-		localStorage.getItem(FAVORITES_STORAGE) || []
+		JSON.parse(localStorage.getItem(FAVORITES_STORAGE)) || []
 	);
 
 	const [loading, setLoading] = useState(false);
@@ -16,26 +16,30 @@ const FavoritesProvider = ({ children }) => {
 	const { token } = useContext(AuthContext);
 
 	const handleClick = (id) => {
-		console.log(id);
+		// console.log(favorites);
 		let newFavorites = [...favorites];
+		// console.log('asd');
+		// console.log(newFavorites);
+		// let newFavorites = [];
 
 		if (favorites.includes(id)) {
 			newFavorites = favorites.filter((movieId) => movieId !== id);
 		} else {
 			newFavorites = newFavorites.concat(id);
 		}
+		// console.log(newFavorites);
 
 		window.localStorage.setItem(
 			FAVORITES_STORAGE,
 			JSON.stringify(newFavorites)
 		);
+
+		// console.log('NEWFAVORITES', newFavorites);
 		setFavorites(newFavorites);
 	};
 
 	const getMovies = async (movieType = 'free', movieId) => {
 		const tokenNumber = token;
-
-		console.log(movieId);
 
 		const apiEndpoint = {
 			all: API.paidMovies,
@@ -50,18 +54,14 @@ const FavoritesProvider = ({ children }) => {
 					Authorization: tokenNumber,
 				},
 			});
-			// console.log('rezultatas', result);
 
 			if (result.status >= 400 && result.status <= 599) {
 				throw new Error('failed to load');
 			} else {
 				const json = await result.json();
 				setMovies(json);
-
-				console.log('FILMAI', movies);
 			}
 		} catch (e) {
-			console.log(e);
 			setError(true);
 		} finally {
 			setLoading(false);

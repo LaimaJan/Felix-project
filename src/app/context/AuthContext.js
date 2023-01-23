@@ -12,8 +12,12 @@ const TokenProvider = ({ children }) => {
 		setToken(token);
 	};
 
+	const logOut = () => {
+		localStorage.removeItem('token');
+	};
+
 	return (
-		<AuthContext.Provider value={{ token, updateToken }}>
+		<AuthContext.Provider value={{ token, updateToken, logOut }}>
 			{children}
 		</AuthContext.Provider>
 	);

@@ -11,37 +11,8 @@ import Button from '../../components/Button';
 import MovieCard from '../../components/MovieCard';
 
 function Home() {
-	// const [freeFilms, setFreeFilms] = useState([]);
-	// const [loading, setLoading] = useState(false);
-	// const [error, setError] = useState(false);
-
 	const { handleClick, favorites, getMovies, error, loading, movies } =
 		useContext(ContentContext);
-
-	console.log('filmai', movies);
-	// console.log('eroras', error);
-
-	// const fetchData = useCallback(async () => {
-	// 	setLoading(false);
-
-	// 	try {
-	// 		const result = await fetch(
-	// 			'https://dummy-video-api.onrender.com/content/free-items'
-	// 		);
-	// 		console.log(result);
-
-	// 		if (result.status >= 400 && result.status <= 599) {
-	// 			throw new Error('failed to load');
-	// 		} else {
-	// 			const json = await result.json();
-	// 			setFreeFilms(json);
-	// 		}
-	// 	} catch (error) {
-	// 		setError(true);
-	// 	} finally {
-	// 		setLoading(false);
-	// 	}
-	// }, []);
 
 	useEffect(() => {
 		getMovies('free');
