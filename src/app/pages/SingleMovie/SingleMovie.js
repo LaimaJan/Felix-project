@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { ContentContext } from '../../context/ContentContext';
 import logo from '../../images/logo.svg';
 import { useParams } from 'react-router-dom';
@@ -27,6 +27,7 @@ function SingleMovie() {
 	};
 
 	const { id } = useParams();
+	console.log(movies);
 
 	useEffect(() => {
 		getMovies('single', id);
@@ -36,27 +37,27 @@ function SingleMovie() {
 		<div className="content-wrapper">
 			<div className="singleMovie-wrapper">
 				<Header>
-					{/* <Link to="/"> */}
 					<Button>
 						<Link to="/" onClick={logOut}>
 							Logout
 						</Link>
 					</Button>
-					{/* </Link> */}
 				</Header>
 				<main>
 					{loading && <img src={logo} className="App-logo" alt="logo" />}
 					{error && <p>Whoops! Failed to Load! 🙊</p>}
-					<SingleMovieCard
-						id={movies.id}
-						key={movies.id}
-						title={movies.title}
-						description={movies.description}
-						image={movies.image}
-						onHandleClick={() => handleClick(movies.id)}
-						isFavorite={favorites.includes(movies.id)}
-						clickWatchTrailer={watchTrailer}
-					/>
+					{movies[0] && (
+						<SingleMovieCard
+							id={movies[0].id}
+							key={movies[0].id}
+							title={movies[0].title}
+							description={movies[0].description}
+							image={movies[0].image}
+							onHandleClick={() => handleClick(movies[0].id)}
+							isFavorite={favorites.includes(movies[0].id)}
+							clickWatchTrailer={watchTrailer}
+						/>
+					)}
 				</main>
 				<Footer />
 			</div>
@@ -64,12 +65,14 @@ function SingleMovie() {
 				className={openModal ? 'show-video-modal' : 'disable-video-modal'}
 				onClick={exitTrailer}
 			>
-				<iframe
-					title="movieTrailer"
-					src={movies.video}
-					frameBorder="0"
-					allowFullScreen
-				/>
+				{movies[0] && (
+					<iframe
+						title="movieTrailer"
+						src={movies[0].video}
+						frameBorder="0"
+						allowFullScreen
+					/>
+				)}
 			</div>
 		</div>
 	);

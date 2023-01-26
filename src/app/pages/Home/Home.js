@@ -14,6 +14,8 @@ function Home() {
 	const { handleClick, favorites, getMovies, error, loading, movies } =
 		useContext(ContentContext);
 
+	console.log('movies', movies);
+
 	useEffect(() => {
 		getMovies('free');
 	}, []);

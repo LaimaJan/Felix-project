@@ -18,9 +18,6 @@ const FavoritesProvider = ({ children }) => {
 	const handleClick = (id) => {
 		// console.log(favorites);
 		let newFavorites = [...favorites];
-		// console.log('asd');
-		// console.log(newFavorites);
-		// let newFavorites = [];
 
 		if (favorites.includes(id)) {
 			newFavorites = favorites.filter((movieId) => movieId !== id);
@@ -58,7 +55,10 @@ const FavoritesProvider = ({ children }) => {
 			if (result.status >= 400 && result.status <= 599) {
 				throw new Error('failed to load');
 			} else {
-				const json = await result.json();
+				let json = await result.json();
+				if (movieType === 'single') {
+					json = [json];
+				}
 				setMovies(json);
 			}
 		} catch (e) {

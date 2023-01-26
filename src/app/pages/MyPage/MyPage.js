@@ -22,6 +22,8 @@ function MyPage() {
 		navigate(`/singleMovie/${id}`);
 	};
 
+	console.log(movies);
+
 	useEffect(() => {
 		getMovies('all');
 	}, []);

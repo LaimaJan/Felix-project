@@ -13,7 +13,9 @@ const TokenProvider = ({ children }) => {
 	};
 
 	const logOut = () => {
-		localStorage.removeItem('token');
+		console.log('logOut triggered');
+		setToken(null);
+		// localStorage.removeItem('token');
 	};
 
 	return (
